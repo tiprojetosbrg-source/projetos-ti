@@ -529,22 +529,44 @@ class AppController {
 
   atualizarListasDeFiltro() {
     this.migrarStatusLegado();
-    const listaMacroConfig = Array.isArray(this.configuracoes.listaCadeiaValor) ? this.configuracoes.listaCadeiaValor : ['Operações', 'Comercial', 'Financeiro', 'Tecnologia', 'Suprimentos'];
-    const macroCadeias = [...new Set([...listaMacroConfig, ...this.bancoDados.map(x => x.macroCadeiaValor)])].filter(Boolean);
-    const cadeias = [...new Set([...(this.configuracoes.cadeiasValor || []), ...this.bancoDados.map(x => x.cadeiaValor)])].filter(Boolean);
-    const equipes = [...new Set([...(this.configuracoes.equipes || []), ...this.bancoDados.map(x => x.equipe)])].filter(Boolean);
+
+    // 1. Listas oficiais ativas nas Configurações (fonte da verdade para cadastro/edição)
+    const macroConfig = Array.isArray(this.configuracoes.listaCadeiaValor)
+      ? [...this.configuracoes.listaCadeiaValor].filter(Boolean)
+      : ['Operações', 'Comercial', 'Financeiro', 'Tecnologia', 'Suprimentos'];
+    const cadeiasConfig = [...(this.configuracoes.cadeiasValor || [])].filter(Boolean);
+    const equipesConfig = [...(this.configuracoes.equipes || [])].filter(Boolean);
+
+    // 2. Listas completas para Filtros de Consulta (inclui valores legados ainda presentes em atividades)
+    const macroFiltros = [...new Set([...macroConfig, ...this.bancoDados.map(x => x.macroCadeiaValor)])].filter(Boolean);
+    const cadeiasFiltros = [...new Set([...cadeiasConfig, ...this.bancoDados.map(x => x.cadeiaValor)])].filter(Boolean);
+    const equipesFiltros = [...new Set([...equipesConfig, ...this.bancoDados.map(x => x.equipe)])].filter(Boolean);
+
     const statusOpcoes = this.configuracoes.statusList || ['Não iniciado', 'Em Andamento', 'Em Revisão', 'Bloqueado', 'Concluído'];
     const prioridadesOpcoes = (this.configuracoes && Array.isArray(this.configuracoes.prioridades) && this.configuracoes.prioridades.length > 0)
       ? this.configuracoes.prioridades
       : (window.configuracoesPadrao?.prioridades || ['P0 - Crítica', 'P1 - Alta', 'P2 - Média', 'P3 - Baixa']);
 
-    const setDropdownOptions = (id, optionsList, defaultText, selectedValue) => {
+    const setDropdownOptions = (id, optionsList, defaultText, selectedValue, preservarLegado = false) => {
       const el = document.getElementById(id);
-      if (el) {
-        let html = defaultText ? `<option value="">${defaultText}</option>` : '';
-        html += optionsList.map(opt => `<option value="${this.escapeHtml(opt)}">${this.escapeHtml(opt)}</option>`).join('');
-        el.innerHTML = html;
-        if (selectedValue && optionsList.includes(selectedValue)) el.value = selectedValue;
+      if (!el) return;
+
+      const listaFinal = [...optionsList];
+      // Se estiver editando uma atividade antiga cujo valor foi removido das configurações, mantém visível apenas para ela
+      if (preservarLegado && selectedValue && !listaFinal.includes(selectedValue)) {
+        listaFinal.push(selectedValue);
+      }
+
+      let html = defaultText ? `<option value="">${defaultText}</option>` : '';
+      html += listaFinal.map(opt => {
+        const isLegado = preservarLegado && !optionsList.includes(opt);
+        const label = isLegado ? `${opt} (Descontinuado)` : opt;
+        return `<option value="${this.escapeHtml(opt)}">${this.escapeHtml(label)}</option>`;
+      }).join('');
+
+      el.innerHTML = html;
+      if (selectedValue && listaFinal.includes(selectedValue)) {
+        el.value = selectedValue;
       }
     };
 
@@ -565,20 +587,22 @@ class AppController {
       this.roadmapComponent.popularDropdownPrioridadesRoadmap();
     }
 
-    setDropdownOptions('filtroMacroCadeiaValor', macroCadeias, 'Todas Cadeias de Valor', document.getElementById('filtroMacroCadeiaValor')?.value);
-    setDropdownOptions('filtroCadeiaValor', cadeias, 'Todos Projetos / Frentes', document.getElementById('filtroCadeiaValor')?.value);
-    setDropdownOptions('filtroEquipe', equipes, 'Todas as Equipes', document.getElementById('filtroEquipe')?.value);
+    // Dropdowns de Filtro (mantêm valores legados para consulta e reclassificação)
+    setDropdownOptions('filtroMacroCadeiaValor', macroFiltros, 'Todas Cadeias de Valor', document.getElementById('filtroMacroCadeiaValor')?.value);
+    setDropdownOptions('filtroCadeiaValor', cadeiasFiltros, 'Todos Projetos / Frentes', document.getElementById('filtroCadeiaValor')?.value);
+    setDropdownOptions('filtroEquipe', equipesFiltros, 'Todas as Equipes', document.getElementById('filtroEquipe')?.value);
     setDropdownOptions('filtroStatus', statusOpcoes, 'Todos Status', document.getElementById('filtroStatus')?.value);
 
-    setDropdownOptions('filtroMacroCadeiaRoadmap', macroCadeias, 'Todas Cadeias de Valor', document.getElementById('filtroMacroCadeiaRoadmap')?.value);
-    setDropdownOptions('filtroFrenteRoadmap', cadeias, 'Todas as Frentes', document.getElementById('filtroFrenteRoadmap')?.value);
+    setDropdownOptions('filtroMacroCadeiaRoadmap', macroFiltros, 'Todas Cadeias de Valor', document.getElementById('filtroMacroCadeiaRoadmap')?.value);
+    setDropdownOptions('filtroFrenteRoadmap', cadeiasFiltros, 'Todas as Frentes', document.getElementById('filtroFrenteRoadmap')?.value);
     setDropdownOptions('filtroStatusRoadmap', statusOpcoes, 'Todos Status', document.getElementById('filtroStatusRoadmap')?.value);
 
-    setDropdownOptions('inputPrioridade', prioridadesOpcoes, '', document.getElementById('inputPrioridade')?.value || prioridadesOpcoes[0]);
-    setDropdownOptions('inputMacroCadeiaValor', macroCadeias, '', document.getElementById('inputMacroCadeiaValor')?.value);
-    setDropdownOptions('inputCadeiaValor', cadeias, '', document.getElementById('inputCadeiaValor')?.value);
-    setDropdownOptions('inputEquipe', equipes, '', document.getElementById('inputEquipe')?.value);
-    setDropdownOptions('inputStatus', statusOpcoes, '', document.getElementById('inputStatus')?.value || 'Não iniciado');
+    // Dropdowns do Formulário (exibem APENAS as opções ativas nas Configurações)
+    setDropdownOptions('inputPrioridade', prioridadesOpcoes, '', document.getElementById('inputPrioridade')?.value || prioridadesOpcoes[0], true);
+    setDropdownOptions('inputMacroCadeiaValor', macroConfig, '', document.getElementById('inputMacroCadeiaValor')?.value, true);
+    setDropdownOptions('inputCadeiaValor', cadeiasConfig, '', document.getElementById('inputCadeiaValor')?.value, true);
+    setDropdownOptions('inputEquipe', equipesConfig, '', document.getElementById('inputEquipe')?.value, true);
+    setDropdownOptions('inputStatus', statusOpcoes, '', document.getElementById('inputStatus')?.value || 'Não iniciado', true);
   }
 
   exibirToast(mensagem, tipo = 'info') {
