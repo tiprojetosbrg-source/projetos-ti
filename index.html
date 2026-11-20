@@ -1,0 +1,2795 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prioridades dos Projetos BRG - Painel Executivo & Atividades</title>
+
+  <!-- Google Fonts: Inter e JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          boxShadow: {
+            '2xs': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+            'xs': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+            'card': '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02)',
+            'card-hover': '0 8px 16px -4px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03)',
+            'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.03)'
+          },
+          backdropBlur: {
+            'xs': '2px',
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .hidden { display: none !important; }
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      letter-spacing: -0.011em;
+    }
+
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 transparent;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    @keyframes pulseSave {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+    .pulse-save { animation: pulseSave 0.3s ease-in-out; }
+
+    @keyframes fadeInModal {
+      from { opacity: 0; transform: translateY(8px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .animate-modal { animation: fadeInModal 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    .drop-target-active {
+      outline: 2px dashed #10b981 !important;
+      background-color: #ecfdf5 !important;
+    }
+
+    .scroll-x-invisible::-webkit-scrollbar {
+      display: none;
+    }
+    .scroll-x-invisible {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .roadmap-bar {
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .roadmap-bar:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.2);
+      filter: brightness(1.04);
+    }
+
+    .bar-carry-over-right {
+      border-top-right-radius: 0px !important;
+      border-bottom-right-radius: 0px !important;
+      border-right: 3px dashed rgba(255, 255, 255, 0.7);
+    }
+    .bar-carry-over-left {
+      border-top-left-radius: 0px !important;
+      border-bottom-left-radius: 0px !important;
+      border-left: 3px dashed rgba(255, 255, 255, 0.7);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pulse-save,
+      .animate-modal,
+      .roadmap-bar {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    textarea {
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
+    th.resizable {
+      position: relative;
+    }
+    .resizer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 7px;
+      cursor: col-resize;
+      user-select: none;
+      height: 100%;
+      z-index: 10;
+    }
+    .resizer:hover, .resizer.resizing {
+      border-right: 3px solid #10b981;
+    }
+  </style>
+</head>
+<body class="bg-slate-50/80 text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+  <!-- ================= TOP HEADER ================= -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/90 sticky top-0 z-30 shadow-subtle">
+    <div class="w-full px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand & Identification -->
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center shadow-xs ring-2 ring-emerald-500/10">
+          <i class="fa-solid fa-list-check text-sm"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-semibold text-sm sm:text-base text-slate-900 tracking-tight leading-tight" id="lblHeaderTitulo">
+              Prioridades dos Projetos BRG
+            </h1>
+            <span class="text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded font-mono">v5.0 Pro</span>
+          </div>
+          <p class="text-[11px] text-slate-500 font-medium">Controle executivo de portfólio e sincronização Excel</p>
+        </div>
+      </div>
+
+      <!-- Actions & Excel File Controls with Global Settings Button -->
+      <div class="flex items-center flex-wrap gap-2">
+        <div id="fileStatusBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs text-slate-600 transition-colors">
+          <span id="statusIndicatorDot" class="w-2 h-2 rounded-full bg-amber-500"></span>
+          <span id="statusIndicatorText" class="font-mono text-[11px] truncate max-w-[170px]">Memória (Sem .xlsx)</span>
+        </div>
+
+        <button 
+          type="button"
+          onclick="app.abrirModalConfiguracoes()"
+          id="btnConfigGlobal"
+          class="bg-white hover:bg-slate-50 border border-slate-200 active:scale-95 transition text-slate-700 px-2.5 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 shadow-2xs hover:border-slate-300 group"
+          title="Configurações da Planilha Excel"
+        >
+          <i class="fa-solid fa-gear text-slate-500 group-hover:text-slate-800 transition-transform duration-300 group-hover:rotate-45 text-xs"></i>
+          <span class="hidden sm:inline font-medium">Configurações</span>
+        </button>
+
+        <button 
+          type="button"
+          onclick="app.reautorizarPermissao()" 
+          id="btnReautorizar"
+          class="hidden bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-800 active:scale-95 transition px-3 py-1.5 rounded-lg text-xs font-semibold items-center gap-1.5 shadow-2xs animate-pulse"
+          title="Clique para reconfirmar a permissão de gravação"
+        >
+          <i class="fa-solid fa-key text-amber-600"></i>
+          <span>Reconectar Permissão</span>
+        </button>
+
+        <button 
+          type="button"
+          onclick="app.vincularArquivo()" 
+          id="btnAbrirArquivo"
+          class="bg-white hover:bg-slate-50 border border-slate-200 active:scale-95 transition text-slate-700 px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 shadow-2xs hover:border-slate-300"
+          title="Importar uma planilha .xlsx existente para o banco de dados Firebase"
+        >
+          <i class="fa-solid fa-file-import text-emerald-600"></i>
+          <span>Importar .xlsx</span>
+        </button>
+
+        <button 
+          type="button"
+          onclick="app.realizarLogoutFirebase()" 
+          id="btnLogoutFirebase"
+          class="hidden bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 active:scale-95 transition text-slate-600 hover:text-rose-700 px-2.5 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 shadow-2xs"
+          title="Encerrar sessão"
+        >
+          <i class="fa-solid fa-right-from-bracket text-xs"></i>
+          <span class="hidden sm:inline">Sair</span>
+        </button>
+
+        <input type="file" id="fallbackFileInput" accept=".xlsx" class="hidden" onchange="app.processarArquivoFallback(event)" aria-label="Upload de planilha fallback">
+      </div>
+
+    </div>
+
+    <!-- ================= SUB-HEADER: NAVEGAÇÃO DE ABAS ================= -->
+    <div class="border-t border-slate-200/70 bg-slate-50/50">
+      <div class="w-full px-4 sm:px-6 flex items-center justify-between">
+        
+        <nav class="flex items-center gap-1" aria-label="Abas de Navegação">
+          <button 
+            type="button" 
+            id="tabNavExecutivo" 
+            onclick="app.alternarVisaoPrincipal('executivo')" 
+            class="group relative py-2.5 px-3.5 text-xs font-semibold flex items-center gap-2 border-b-2 border-emerald-600 text-emerald-700 transition"
+          >
+            <i class="fa-solid fa-chart-pie text-emerald-600"></i>
+            <span>Painel Executivo</span>
+            <span id="badgeTabExecutivo" class="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono font-bold">KPIs</span>
+          </button>
+
+          <button 
+            type="button" 
+            id="tabNavAtividades" 
+            onclick="app.alternarVisaoPrincipal('atividades')" 
+            class="group relative py-2.5 px-3.5 text-xs font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition"
+          >
+            <i class="fa-solid fa-table-list text-slate-400 group-hover:text-slate-600"></i>
+            <span>Detalhe das Atividades</span>
+            <span id="badgeTabAtividades" class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-200/80 text-slate-600 font-mono">0</span>
+          </button>
+
+          <button 
+            type="button" 
+            id="tabNavRoadmap" 
+            onclick="app.alternarVisaoPrincipal('roadmap')" 
+            class="group relative py-2.5 px-3.5 text-xs font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition"
+          >
+            <i class="fa-solid fa-timeline text-slate-400 group-hover:text-slate-600"></i>
+            <span>Roadmap Estratégico</span>
+            <span id="badgeTabRoadmap" class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-200/80 text-slate-600 font-mono">0</span>
+          </button>
+
+          <button 
+            type="button" 
+            id="tabNavReport" 
+            onclick="app.alternarVisaoPrincipal('report')" 
+            class="group relative py-2.5 px-3.5 text-xs font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition"
+          >
+            <i class="fa-solid fa-table-columns text-slate-400 group-hover:text-slate-600"></i>
+            <span>Relatório / Report</span>
+            <span id="badgeTabReport" class="ml-1 text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">0</span>
+          </button>
+        </nav>
+
+        <div class="flex items-center gap-2 py-1.5">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-mono font-semibold shadow-2xs">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span id="lblSubheaderCiclo">Ciclo Q4 2026</span>
+          </span>
+
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-mono font-semibold shadow-2xs">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span>Gravação: <strong id="kpiUltimoSync" class="font-bold">--:--:--</strong></span>
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================= BANNER DE ALTERAÇÕES EXTERNAS (AUTO-SYNC) ================= -->
+    <div id="bannerSyncExterno" class="hidden bg-slate-900 border-b border-blue-500/30 text-white text-xs px-4 py-2 sticky top-[89px] z-20 shadow-md">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2.5">
+        <div class="flex items-center gap-2 text-slate-200">
+          <span class="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span>
+          <i class="fa-solid fa-cloud-arrow-down text-blue-400 text-sm"></i>
+          <span>A planilha física foi modificada no disco por outro usuário. O seu rascunho atual em digitação está seguro.</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button 
+            type="button" 
+            onclick="app.aplicarSincronizacaoExterna()" 
+            class="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-3 py-1 rounded-md text-[11px] shadow-2xs transition active:scale-95 flex items-center gap-1.5"
+          >
+            <i class="fa-solid fa-rotate text-[10px]"></i>
+            <span>Atualizar Dados de Fundo</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="app.ignorarBannerSyncExterno()" 
+            class="text-slate-400 hover:text-white px-1.5 py-1 text-xs transition" 
+            title="Dispensar este aviso"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="fixed top-20 right-4 z-50 flex flex-col gap-2 pointer-events-none" aria-live="polite"></div>
+
+  <!-- ================= MAIN WORKSPACE ================= -->
+  <main class="w-full px-4 sm:px-6 py-4 flex-1 flex flex-col gap-4">
+
+    <!-- KPI Summary Cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      
+      <div class="bg-white border border-slate-200/90 rounded-xl p-3.5 shadow-card hover:shadow-card-hover transition relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-0.5 bg-emerald-500/80"></div>
+        <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
+          <span class="font-medium text-slate-500">Total de Atividades</span>
+          <i class="fa-solid fa-bars-progress text-slate-400"></i>
+        </div>
+        <div class="text-xl sm:text-2xl font-bold text-slate-900 font-mono tracking-tight" id="kpiTotalAtividades">0</div>
+        <div class="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1.5">
+          <span class="text-emerald-700 font-semibold bg-emerald-50 border border-emerald-100 px-1.5 py-0.5 rounded" id="kpiTaxaConclusao">0%</span>
+          <span>concluídas</span>
+        </div>
+      </div>
+
+      <div 
+        role="button"
+        tabindex="0"
+        onclick="app.irParaAtividadesFiltradasP0P1()"
+        onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); app.irParaAtividadesFiltradasP0P1(); }"
+        class="bg-white border border-slate-200/90 rounded-xl p-3.5 shadow-card hover:shadow-card-hover transition relative overflow-hidden cursor-pointer group focus:ring-2 focus:ring-rose-500/20 outline-none"
+        title="Clique para filtrar apenas P0 e P1 ativas"
+      >
+        <div class="absolute top-0 left-0 right-0 h-0.5 bg-rose-500/80"></div>
+        <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
+          <span class="font-medium text-slate-500 group-hover:text-rose-600 transition-colors">Prioridade P0 / P1 Ativas</span>
+          <i class="fa-solid fa-triangle-exclamation text-rose-500"></i>
+        </div>
+        <div class="text-xl sm:text-2xl font-bold text-rose-600 font-mono tracking-tight" id="kpiPrioridadeCritica">0</div>
+        <div class="text-[11px] text-slate-500 mt-0.5 flex items-center justify-between">
+          <span>Gargalos e foco imediato</span>
+          <span class="text-[10px] text-rose-600 font-semibold group-hover:underline flex items-center gap-0.5">Filtrar <i class="fa-solid fa-arrow-right text-[8px]"></i></span>
+        </div>
+      </div>
+
+      <div class="bg-white border border-slate-200/90 rounded-xl p-3.5 shadow-card hover:shadow-card-hover transition relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-0.5 bg-amber-500/80"></div>
+        <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
+          <span class="font-medium text-slate-500">Em Curso / Bloqueadas</span>
+          <i class="fa-solid fa-arrows-spin text-amber-500"></i>
+        </div>
+        <div class="text-xl sm:text-2xl font-bold text-slate-800 font-mono tracking-tight" id="kpiEmAndamentoBloqueadas">0 / 0</div>
+        <div class="text-[11px] text-slate-500 mt-0.5">Em execução no ciclo</div>
+      </div>
+
+      <div 
+        role="button"
+        tabindex="0"
+        onclick="app.abrirModalRelatorioAtrasos()"
+        onkeydown="if(event.key === 'Enter' || event.key === ' ') { event.preventDefault(); app.abrirModalRelatorioAtrasos(); }"
+        class="bg-white border border-slate-200/90 rounded-xl p-3.5 shadow-card hover:shadow-card-hover transition relative overflow-hidden cursor-pointer group focus:ring-2 focus:ring-red-500/20 outline-none"
+        title="Clique para visualizar o relatório executivo de etapas atrasadas"
+      >
+        <div class="absolute top-0 left-0 right-0 h-0.5 bg-red-600"></div>
+        <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
+          <span class="font-medium text-slate-600 group-hover:text-red-700 transition-colors">Fora do Prazo (Etapa)</span>
+          <i class="fa-solid fa-calendar-xmark text-red-500 group-hover:scale-110 transition-transform"></i>
+        </div>
+        <div class="text-xl sm:text-2xl font-bold text-red-600 font-mono tracking-tight" id="kpiForaDoPrazo">0</div>
+        <div class="text-[11px] text-slate-500 mt-0.5 flex items-center justify-between">
+          <span>Data programada expirada</span>
+          <span class="text-[10px] text-red-600 font-semibold group-hover:underline flex items-center gap-0.5">
+            Ver Relatório <i class="fa-solid fa-arrow-right text-[8px]"></i>
+          </span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ================= CONTEÚDO DA ABA 1: PAINEL EXECUTIVO ================= -->
+    <div id="visaoPainelExecutivo" class="space-y-4 flex flex-col flex-1">
+      
+      <!-- Linha 1: Radar P0/P1 Ativas & Pipeline Interativo por Status -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        
+        <div class="lg:col-span-7 bg-white border border-slate-200/90 rounded-xl p-4 shadow-card flex flex-col">
+          <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center text-xs ring-1 ring-rose-100">
+                <i class="fa-solid fa-fire-flame-curved"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-xs text-slate-900">Radar de Demandas Críticas em Aberto (P0 e P1)</h3>
+                <p class="text-[10px] text-slate-400">Priorização executiva dinâmica (arraste para ordenar ou use setas)</p>
+              </div>
+            </div>
+            <button 
+              type="button"
+              onclick="app.irParaAtividadesFiltradasP0P1()" 
+              class="text-[11px] text-emerald-700 hover:text-emerald-800 hover:underline font-medium flex items-center gap-1 transition"
+            >
+              <span>Ver todas</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+
+          <div id="execRadarCriticosContainer" class="divide-y divide-slate-100 overflow-y-auto max-h-[300px] min-h-[140px]">
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 bg-white border border-slate-200/90 rounded-xl p-4 shadow-card flex flex-col">
+          <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xs ring-1 ring-blue-100">
+                <i class="fa-solid fa-layer-group"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-xs text-slate-900">Pipeline por Status da Demanda</h3>
+                <p class="text-[10px] text-slate-400">Clique no status para listar as atividades e abrir detalhes</p>
+              </div>
+            </div>
+            <button 
+              type="button" 
+              id="btnVerStatusNaTabela"
+              onclick="app.irParaAtividadesFiltradasStatusAtual()"
+              class="text-[11px] text-blue-700 hover:text-blue-800 hover:underline font-medium flex items-center gap-1 transition"
+            >
+              <span>Ver na tabela</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+
+          <div id="execStatusPillsContainer" class="flex flex-wrap gap-1.5 mb-3 pb-2 border-b border-slate-100">
+          </div>
+
+          <div id="execStatusAtividadesContainer" class="divide-y divide-slate-100 overflow-y-auto max-h-[220px] flex-1 pr-1 min-h-[140px]">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Linha 2 de Painéis Executivos: Pipeline do Ciclo & Progresso por Projetos -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        
+        <div class="lg:col-span-7 bg-white border border-slate-200/90 rounded-xl p-4 shadow-card flex flex-col">
+          <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs ring-1 ring-emerald-100">
+                <i class="fa-solid fa-filter-circle-dollar"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-xs text-slate-900">Pipeline do Ciclo da Demanda</h3>
+                <p class="text-[10px] text-slate-400">Distribuição física das tarefas pelas etapas com peso percentual</p>
+              </div>
+            </div>
+            <span class="text-[11px] font-mono text-slate-500" id="execTotalEtapasBadge">0 etapas</span>
+          </div>
+
+          <div id="execFunilEtapasContainer" class="space-y-2.5 flex-1 overflow-y-auto max-h-[280px] pr-1">
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 bg-white border border-slate-200/90 rounded-xl p-4 shadow-card flex flex-col">
+          <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs ring-1 ring-indigo-100">
+                <i class="fa-solid fa-sitemap"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-xs text-slate-900">Progresso por Projetos / Frentes</h3>
+                <p class="text-[10px] text-slate-400">Taxa de conclusão e média de progresso</p>
+              </div>
+            </div>
+            <span class="text-[11px] font-mono text-slate-500" id="execTotalCadeiasBadge">0 frentes</span>
+          </div>
+
+          <div id="execCadeiaValorContainer" class="space-y-3 flex-1 overflow-y-auto max-h-[280px] pr-1">
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ================= CONTEÚDO DA ABA 2: DETALHE DAS ATIVIDADES ================= -->
+    <div id="visaoDetalheAtividades" class="hidden flex-1 flex flex-col gap-4">
+      
+      <section class="bg-white border border-slate-200/90 rounded-xl shadow-card overflow-hidden flex flex-col flex-1">
+        
+        <div class="p-3 sm:p-3.5 border-b border-slate-200/80 bg-slate-50/60 flex flex-col gap-2.5">
+          
+          <div class="flex flex-wrap items-center justify-between gap-2.5">
+            
+            <div class="relative flex-1 min-w-[220px] max-w-md">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+              <input 
+                type="text" 
+                id="filtroBusca" 
+                oninput="app.aplicarFiltrosComDebounce()"
+                placeholder="Buscar por ID, título, responsável, dev..." 
+                class="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none transition shadow-2xs"
+                aria-label="Campo de busca de atividades"
+              >
+            </div>
+            
+            <div class="flex items-center gap-2 shrink-0">
+              
+              <div class="inline-flex items-center bg-white border border-slate-200 rounded-lg p-0.5 shadow-2xs">
+                <label class="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium text-slate-600 cursor-pointer select-none hover:text-slate-900 border-r border-slate-100">
+                  <input type="checkbox" id="autoSaveToggle" checked class="rounded text-emerald-600 focus:ring-0 cursor-pointer h-3.5 w-3.5">
+                  <span>Auto-Salvar</span>
+                </label>
+
+                <button 
+                  type="button"
+                  onclick="app.salvarNoExcel(true)" 
+                  id="btnSalvarManual" 
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold text-emerald-700 hover:bg-emerald-50 active:scale-95 transition"
+                  title="Gravar alterações imediatamente no arquivo .xlsx físico"
+                >
+                  <i class="fa-solid fa-floppy-disk text-emerald-600 text-xs"></i>
+                  <span>Gravar</span>
+                </button>
+              </div>
+
+              <button 
+                type="button"
+                onclick="app.abrirModalPreviewExcel()"
+                class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium flex items-center gap-1.5 shadow-2xs transition active:scale-95 hover:border-slate-300"
+                title="Ver abas e células da planilha Excel"
+              >
+                <i class="fa-solid fa-table-cells text-emerald-600 text-xs"></i>
+                <span class="hidden sm:inline">Células Excel (3 Abas)</span>
+              </button>
+
+              <button 
+                type="button"
+                onclick="app.abrirModalForm()" 
+                class="bg-slate-900 hover:bg-slate-800 active:scale-95 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-xs transition hover:shadow-sm"
+              >
+                <i class="fa-solid fa-plus text-xs text-emerald-400"></i>
+                <span>Nova Atividade</span>
+              </button>
+
+            </div>
+
+          </div>
+
+          <!-- Barra de Filtros Dedicada -->
+          <div class="flex items-center gap-2 pt-1 border-t border-slate-200/50 flex-wrap">
+            <div class="flex items-center gap-1.5 text-slate-400 text-[11px] font-medium mr-1 select-none">
+              <i class="fa-solid fa-filter text-[10px]"></i>
+              <span>Filtros:</span>
+            </div>
+
+            <!-- Filtro Pai: Cadeia de Valor -->
+            <select 
+              id="filtroMacroCadeiaValor" 
+              onchange="app.aplicarFiltros(true)"
+              class="px-2.5 py-1 text-xs bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-slate-700 cursor-pointer shadow-2xs transition hover:border-slate-300 font-medium"
+              aria-label="Filtrar por Cadeia de Valor"
+            >
+              <option value="">Todas Cadeias de Valor</option>
+            </select>
+
+            <select 
+              id="filtroCadeiaValor" 
+              onchange="app.aplicarFiltros(true)"
+              class="px-2.5 py-1 text-xs bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-slate-700 cursor-pointer shadow-2xs transition hover:border-slate-300"
+              aria-label="Filtrar por Projetos e Frentes"
+            >
+              <option value="">Todos Projetos / Frentes</option>
+            </select>
+
+            <select 
+              id="filtroEquipe" 
+              onchange="app.aplicarFiltros(true)"
+              class="px-2.5 py-1 text-xs bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-slate-700 cursor-pointer shadow-2xs transition hover:border-slate-300"
+              aria-label="Filtrar por Equipe"
+            >
+              <option value="">Todas as Equipes</option>
+            </select>
+
+            <select 
+              id="filtroPrioridade" 
+              onchange="app.aplicarFiltros(true)"
+              class="px-2.5 py-1 text-xs bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-slate-700 cursor-pointer shadow-2xs transition hover:border-slate-300"
+              aria-label="Filtrar por Prioridade"
+            >
+              <option value="">Todas Prioridades</option>
+              <option value="P0_P1">P0 e P1 (Críticas)</option>
+              <option value="P0 - Crítica">P0 - Crítica</option>
+              <option value="P1 - Alta">P1 - Alta</option>
+              <option value="P2 - Média">P2 - Média</option>
+              <option value="P3 - Baixa">P3 - Baixa</option>
+            </select>
+
+            <select 
+              id="filtroStatus" 
+              onchange="app.aplicarFiltros(true)"
+              class="px-2.5 py-1 text-xs bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-slate-700 cursor-pointer shadow-2xs transition hover:border-slate-300 font-medium"
+              aria-label="Filtrar por Status"
+            >
+              <option value="" selected>Todos Status</option>
+            </select>
+
+            <button 
+              type="button"
+              onclick="app.limparFiltros()" 
+              id="btnLimparFiltros"
+              class="hidden text-[11px] text-slate-500 hover:text-rose-600 px-2 py-0.5 rounded transition items-center gap-1"
+              title="Limpar todos os filtros selecionados"
+            >
+              <i class="fa-solid fa-xmark text-[10px]"></i> Limpar
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Data Table com Suporte a Redimensionamento de Colunas e Rolagem Horizontal Fluida -->
+        <div id="containerTabelaWrapper" class="overflow-x-auto flex-1 min-h-[350px]">
+          <table id="tabelaAtividades" class="text-left text-xs border-collapse table-fixed w-full min-w-[1400px]">
+            <thead>
+              <tr class="bg-slate-50/90 border-b border-slate-200 text-slate-500 font-semibold uppercase tracking-wider text-[10px]">
+                <th scope="col" class="resizable py-2.5 px-2 text-center whitespace-nowrap" style="width: 60px;">
+                  ID
+                  <div class="resizer"></div>
+                </th>
+                <th scope="col" class="resizable py-2.5 px-3 whitespace-nowrap" style="width: 340px;">
+                  Projeto / Atividade
+                  <div class="resizer"></div>
+                </th>
+                <th scope="col" class="resizable py-2.5 px-2 whitespace-nowrap" style="width: 140px;">
+                  Frentes
+                  <div class="resizer"></div>
+                </th>
+                <th scope="col" class="resizable py-2.5 px-2 whitespace-nowrap" style="width: 130px;">
+                  Equipe
+                  <div class="resizer"></div>
+                </th>
+                <th scope="col" class="resizable py-2.5 px-2 text-center whitespace-nowrap" style="width: 110px;">
+                  Prioridade
+                  <div class="resizer"></div>
+                </th>
+                <th scope="col" class="resizable py-2.5 px-2 text-center whitespace-nowrap" style="width: 120px;">
+                  Status
+                  <div class="resizer"></div>
+                </th>
+                <th scope="col" class="resizable py-2.5 pl-3 pr-2 whitespace-nowrap" style="width: 140px;">
+                  Responsável
+                  <div class="resizer"></div>
+                </th>
+                <th scope="col" class="resizable py-2.5 px-2 text-center whitespace-nowrap" style="width: 110px;">
+                  Progresso
+                  <div class="resizer"></div>
+                </th>
+                <th scope="col" class="resizable py-2.5 px-1.5 text-center whitespace-nowrap" style="width: 100px;">
+                  Prazo Ini
+                  <div class="resizer"></div>
+                </th>
+                <th scope="col" class="resizable py-2.5 px-1.5 text-center whitespace-nowrap" style="width: 100px;">
+                  Prazo Prog.
+                  <div class="resizer"></div>
+                </th>
+                <th scope="col" class="resizable py-2.5 px-1.5 text-center whitespace-nowrap" style="width: 90px;">
+                  Conclusão
+                  <div class="resizer"></div>
+                </th>
+                <th scope="col" class="py-2.5 px-1.5 text-center whitespace-nowrap" style="width: 80px;">
+                  Ações
+                </th>
+              </tr>
+            </thead>
+            <tbody id="corpoTabela" class="divide-y divide-slate-100 text-slate-700">
+            </tbody>
+          </table>
+
+          <div id="tabelaVazia" class="hidden py-16 flex flex-col items-center justify-center text-center px-4">
+            <div class="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 text-xl mb-3 shadow-2xs">
+              <i class="fa-solid fa-inbox"></i>
+            </div>
+            <h3 class="text-sm font-semibold text-slate-800">Nenhuma atividade encontrada</h3>
+            <p class="text-xs text-slate-500 max-w-sm mt-1">
+              Ajuste os filtros de busca ou clique em <strong>"Nova Atividade"</strong> para cadastrar na planilha.
+            </p>
+            <button 
+              type="button"
+              onclick="app.limparFiltros()"
+              class="mt-3 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 text-xs font-medium transition shadow-2xs flex items-center gap-1.5"
+            >
+              <i class="fa-solid fa-rotate-left text-[10px]"></i> Limpar todos os filtros
+            </button>
+          </div>
+        </div>
+
+        <!-- Paginação -->
+        <div class="p-2.5 sm:p-3 bg-white border-t border-slate-200/90 flex flex-wrap items-center justify-between gap-3 text-xs">
+          
+          <div class="flex items-center flex-wrap gap-2.5">
+            <div class="flex items-center gap-1.5 text-slate-500 text-[11px]">
+              <label for="selectItensPorPagina" class="select-none">Exibir:</label>
+              <select 
+                id="selectItensPorPagina" 
+                onchange="app.mudarItensPorPagina(this.value)"
+                class="px-2 py-1 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:ring-1 focus:ring-emerald-500 text-slate-700 font-semibold cursor-pointer outline-none transition hover:bg-slate-100 shadow-2xs"
+              >
+                <option value="10" selected>10 por página</option>
+                <option value="25">25 por página</option>
+                <option value="50">50 por página</option>
+                <option value="100">100 por página</option>
+                <option value="todos">Todas</option>
+              </select>
+            </div>
+
+            <span class="text-slate-300 select-none">|</span>
+            <span id="contadorExibidos" class="text-[11px] text-slate-600 font-medium">Exibindo 0 a 0 de 0 atividades</span>
+          </div>
+
+          <div id="containerPaginacaoBotoes" class="flex items-center gap-1">
+          </div>
+
+        </div>
+
+        <div class="p-2.5 sm:p-3 bg-slate-50/80 border-t border-slate-200/70 text-[11px] text-slate-500 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>Arquivo Ativo: <strong id="lblNomeArquivo" class="text-slate-700 font-mono">Memória Temporária</strong></span>
+            </span>
+          </div>
+          <button type="button" onclick="app.baixarCopiaXlsx()" class="text-emerald-700 hover:text-emerald-800 hover:underline font-medium flex items-center gap-1" title="Baixar arquivo físico .xlsx gerado pelo SheetJS com as 3 abas">
+            <i class="fa-solid fa-download text-xs"></i> Baixar .xlsx Completo (3 Abas)
+          </button>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- ================= CONTEÚDO DA ABA 3: ROADMAP ESTRATÉGICO ================= -->
+    <div id="visaoRoadmap" class="hidden flex-1 flex flex-col gap-3">
+      
+      <section class="space-y-2.5">
+        <div class="bg-white border border-slate-200/90 rounded-xl p-3 shadow-card flex flex-wrap items-center justify-between gap-3 text-xs">
+          
+          <div class="flex items-center flex-wrap gap-2">
+            <div class="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs">
+              <button 
+                id="btnAgruparFrentes" 
+                type="button"
+                onclick="app.alterarAgrupamentoRoadmap('cadeiaValor')"
+                class="px-2.5 py-1 rounded-md font-semibold text-slate-800 bg-white shadow-2xs transition"
+              >
+                <i class="fa-solid fa-sitemap text-[10px] text-emerald-600 mr-1"></i> Por Frente
+              </button>
+              <button 
+                id="btnAgruparEquipe" 
+                type="button"
+                onclick="app.alterarAgrupamentoRoadmap('equipe')"
+                class="px-2.5 py-1 rounded-md font-medium text-slate-500 hover:text-slate-800 transition"
+              >
+                <i class="fa-solid fa-users text-[10px] mr-1"></i> Por Equipe
+              </button>
+              <button 
+                id="btnAgruparPlano" 
+                type="button"
+                onclick="app.alterarAgrupamentoRoadmap('plano')"
+                class="px-2.5 py-1 rounded-md font-medium text-slate-500 hover:text-slate-800 transition"
+              >
+                <i class="fa-solid fa-list text-[10px] mr-1"></i> Lista Direta
+              </button>
+            </div>
+
+            <div class="relative">
+              <button 
+                id="btnToggleHorizonteDropdown"
+                type="button"
+                onclick="app.toggleHorizonteDropdown(event)"
+                class="flex items-center bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-xs gap-2 shadow-2xs hover:border-slate-300 transition active:scale-95 text-slate-700"
+                title="Selecione um ou múltiplos anos para o horizonte temporal"
+              >
+                <i class="fa-regular fa-calendar text-slate-400 text-[11px]"></i>
+                <span class="text-slate-400 text-[11px]">Horizonte:</span>
+                <span id="lblHorizonteSelecionado" class="font-semibold text-slate-800">2026</span>
+                <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-0.5"></i>
+              </button>
+
+              <div 
+                id="dropdownHorizonteAnos" 
+                class="hidden absolute left-0 mt-1.5 w-60 bg-white rounded-xl shadow-xl border border-slate-200 p-2.5 z-40 space-y-2 animate-modal"
+              >
+                <div class="flex items-center justify-between pb-1.5 border-b border-slate-100 text-[11px]">
+                  <span class="font-semibold text-slate-700">Anos do Horizonte</span>
+                  <button 
+                    type="button" 
+                    onclick="app.selecionarTodosAnosHorizonte(true)" 
+                    class="text-emerald-700 hover:underline font-medium text-[10px]"
+                  >
+                    Todos
+                  </button>
+                </div>
+
+                <div id="listaCheckboxesAnosRoadmap" class="max-h-44 overflow-y-auto space-y-1 pr-1 text-xs">
+                </div>
+
+                <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between gap-1.5">
+                  <span class="text-[10px] text-slate-400 font-mono" id="lblQtdAnosSelecionados">1 ano ativo</span>
+                  <button 
+                    type="button" 
+                    onclick="app.fecharHorizonteDropdown()" 
+                    class="px-2.5 py-1 bg-slate-900 text-white rounded-md text-[10px] font-semibold hover:bg-slate-800 active:scale-95 transition"
+                  >
+                    Aplicar
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="flex items-center flex-wrap gap-2">
+            <!-- 1. Novo Filtro: Cadeia de Valor (Pai) -->
+            <select 
+              id="filtroMacroCadeiaRoadmap" 
+              onchange="app.renderizarRoadmap()" 
+              class="px-2.5 py-1 text-xs bg-slate-50 border border-slate-200 rounded-lg outline-none text-slate-700 cursor-pointer shadow-2xs font-medium max-w-[160px] truncate" 
+              aria-label="Filtrar cadeia de valor no roadmap"
+            >
+              <option value="">Todas Cadeias de Valor</option>
+            </select>
+
+            <!-- Filtro de Projetos / Frentes já existente -->
+            <select id="filtroFrenteRoadmap" onchange="app.renderizarRoadmap()" class="px-2.5 py-1 text-xs bg-slate-50 border border-slate-200 rounded-lg outline-none text-slate-700 cursor-pointer shadow-2xs max-w-[145px] truncate" aria-label="Filtrar frente no roadmap">
+              <option value="">Todas as Frentes</option>
+            </select>
+
+            <!-- 2. Novo Filtro de Prioridade com Múltipla Escolha -->
+            <div class="relative shrink-0">
+              <button 
+                id="btnTogglePrioridadeRoadmapDropdown"
+                type="button"
+                onclick="app.togglePrioridadeRoadmapDropdown(event)"
+                class="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-xs gap-1.5 shadow-2xs hover:border-slate-300 transition active:scale-95 text-slate-700 shrink-0"
+                title="Selecione uma ou mais prioridades para filtrar"
+              >
+                <i class="fa-solid fa-flag text-slate-400 text-[10px]"></i>
+                <span class="text-slate-500 text-[11px]">Prioridade:</span>
+                <span id="lblPrioridadeRoadmapSelecionada" class="font-semibold text-slate-800 max-w-[75px] truncate inline-block align-bottom">Todas</span>
+                <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-0.5"></i>
+              </button>
+
+              <div 
+                id="dropdownPrioridadeRoadmap" 
+                class="hidden absolute right-0 sm:left-0 mt-1.5 w-52 bg-white rounded-xl shadow-xl border border-slate-200 p-2.5 z-40 space-y-2 animate-modal"
+              >
+                <div class="flex items-center justify-between pb-1.5 border-b border-slate-100 text-[11px]">
+                  <span class="font-semibold text-slate-700">Filtrar Prioridades</span>
+                  <div class="flex items-center gap-1.5">
+                    <button 
+                      type="button" 
+                      onclick="app.selecionarTodasPrioridadesRoadmap(true)" 
+                      class="text-emerald-700 hover:underline font-medium text-[10px]"
+                    >
+                      Todas
+                    </button>
+                    <span class="text-slate-300">•</span>
+                    <button 
+                      type="button" 
+                      onclick="app.selecionarTodasPrioridadesRoadmap(false)" 
+                      class="text-slate-500 hover:underline font-medium text-[10px]"
+                    >
+                      Limpar
+                    </button>
+                  </div>
+                </div>
+
+                <div id="listaCheckboxesPrioridadeRoadmap" class="space-y-1 text-xs max-h-48 overflow-y-auto pr-1">
+                </div>
+
+                <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between gap-1.5">
+                  <span class="text-[10px] text-slate-400 font-mono" id="lblQtdPrioridadesRoadmap">Todas ativas</span>
+                  <button 
+                    type="button" 
+                    onclick="app.fecharPrioridadeRoadmapDropdown()" 
+                    class="px-2.5 py-1 bg-slate-900 text-white rounded-md text-[10px] font-semibold hover:bg-slate-800 active:scale-95 transition"
+                  >
+                    Aplicar
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filtro de Status já existente -->
+            <select id="filtroStatusRoadmap" onchange="app.renderizarRoadmap()" class="px-2.5 py-1 text-xs bg-slate-50 border border-slate-200 rounded-lg outline-none text-slate-700 cursor-pointer shadow-2xs" aria-label="Filtrar status no roadmap">
+              <option value="">Todos Status</option>
+            </select>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Grade Principal do Roadmap -->
+      <section class="bg-white border border-slate-200/90 rounded-2xl shadow-card flex flex-col flex-1 overflow-hidden min-h-[460px] max-h-[70vh]">
+        
+        <div class="flex border-b border-slate-200 bg-slate-100/80 shrink-0 select-none">
+          <!-- 1. CABEÇALHO COM RESIZER -->
+          <div id="roadmapHeaderColunaEsq" class="w-72 sm:w-96 p-3 border-r border-slate-200/90 font-semibold text-xs text-slate-700 flex items-center justify-between shrink-0 relative resizable">
+            <span>Iniciativa / Demanda</span>
+            <span id="badgeTotalRoadmap" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-200 text-slate-700 mr-2">0 itens</span>
+            <div class="resizer"></div>
+          </div>
+
+          <div id="timelineHeaderContainer" class="flex-1 overflow-x-hidden flex flex-col box-border">
+            <div id="timelineTopHeaderRow" class="flex border-b border-slate-200/70 text-[10px] font-semibold text-slate-500 uppercase tracking-wider text-center">
+            </div>
+            <div id="timelineQuartersHeader" class="flex border-b border-slate-200/70 text-[10px] font-bold text-slate-500 uppercase tracking-wider text-center">
+            </div>
+            <div id="timelineMonthsHeader" class="flex text-xs font-semibold text-slate-700">
+            </div>
+          </div>
+        </div>
+
+        <div class="flex border-b border-slate-200 bg-slate-50 shrink-0">
+          <!-- 2. ESPAÇADOR DA SCROLLBAR COM ID -->
+          <div id="roadmapScrollbarSpacer" class="w-72 sm:w-96 shrink-0 border-r border-slate-200/90"></div>
+          <div id="timelineTopScrollbar" class="flex-1 overflow-x-auto overflow-y-hidden box-border" style="height: 14px;">
+            <div id="timelineTopScrollbarInner" style="height: 1px;"></div>
+          </div>
+        </div>
+
+        <div id="roadmapBodyScroll" class="flex-1 overflow-y-auto overflow-x-hidden flex relative">
+          <!-- 3. CORPO DAS DEMANDAS -->
+          <div id="colunaEsquerdaDemandas" class="w-72 sm:w-96 border-r border-slate-200/90 bg-white shrink-0 divide-y divide-slate-100">
+          </div>
+          <div id="colunaDireitaGrade" class="flex-1 overflow-x-auto overflow-y-hidden h-fit min-h-full relative bg-slate-50/20 scroll-x-invisible">
+          </div>
+        </div>
+
+        <div class="p-2.5 sm:p-3 bg-slate-50 border-t border-slate-200/80 flex flex-wrap items-center justify-between text-[11px] text-slate-500 shrink-0 gap-2">
+          <div class="flex items-center flex-wrap gap-3">
+            <span class="inline-flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>Coluna Mês Atual (Hoje)</span>
+            </span>
+            <span class="text-slate-300">|</span>
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-sky-500"></span> Planejamento</span>
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-blue-600"></span> Dev</span>
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-amber-500"></span> QA / UAT</span>
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-600"></span> Concluído</span>
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-rose-500"></span> Bloqueado</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="font-medium text-slate-700 font-mono" id="lblCicloRoadmap">Ciclo Ativo</span>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- ================= ABA 4: REPORT PERSONALIZADO ================= -->
+    <div id="visaoReport" class="hidden flex-1 flex flex-col min-h-0 overflow-hidden bg-slate-50/50">
+      
+      <!-- Barra Superior: Filtros Rápidos e Ações -->
+      <div class="p-3 sm:p-4 bg-white border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <!-- Filtros do Report (Cadeia de Valor, Frentes, Prioridade e Status) -->
+        <div class="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
+          <!-- 1. Cadeia de Valor (Pai) -->
+          <select 
+            id="filtroMacroCadeiaReport" 
+            onchange="app.aplicarFiltrosReport()" 
+            class="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-700 cursor-pointer shadow-2xs font-medium"
+          >
+            <option value="">Todas as Cadeias de Valor</option>
+          </select>
+
+          <!-- 2. Projetos / Frentes -->
+          <select 
+            id="filtroCadeiaReport" 
+            onchange="app.aplicarFiltrosReport()" 
+            class="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-700 cursor-pointer shadow-2xs font-medium"
+          >
+            <option value="">Todas as Frentes</option>
+          </select>
+
+          <!-- 3. Prioridade -->
+          <div class="relative shrink-0">
+            <button 
+              id="btnTogglePrioridadeReportDropdown"
+              type="button"
+              onclick="app.togglePrioridadeReportDropdown(event)"
+              class="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs gap-1.5 shadow-2xs hover:border-slate-300 transition active:scale-95 text-slate-700 shrink-0 font-medium"
+              title="Selecione uma ou mais prioridades para filtrar"
+            >
+              <i class="fa-solid fa-flag text-slate-400 text-[10px]"></i>
+              <span class="text-slate-500 text-[11px]">Prioridade:</span>
+              <span id="lblPrioridadeReportSelecionada" class="font-semibold text-slate-800 max-w-[85px] truncate inline-block align-bottom">Todas</span>
+              <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-0.5"></i>
+            </button>
+
+            <div 
+              id="dropdownPrioridadeReport" 
+              class="hidden absolute right-0 sm:left-0 mt-1.5 w-56 bg-white rounded-xl shadow-xl border border-slate-200 p-2.5 z-40 space-y-2 animate-modal"
+            >
+              <div class="flex items-center justify-between pb-1.5 border-b border-slate-100 text-[11px]">
+                <span class="font-semibold text-slate-700">Filtrar Prioridades</span>
+                <div class="flex items-center gap-1.5">
+                  <button 
+                    type="button" 
+                    onclick="app.selecionarTodasPrioridadesReport(true)" 
+                    class="text-emerald-700 hover:underline font-medium text-[10px]"
+                  >
+                    Todas
+                  </button>
+                  <span class="text-slate-300">•</span>
+                  <button 
+                    type="button" 
+                    onclick="app.selecionarTodasPrioridadesReport(false)" 
+                    class="text-slate-500 hover:underline font-medium text-[10px]"
+                  >
+                    Limpar
+                  </button>
+                </div>
+              </div>
+
+              <div id="listaCheckboxesPrioridadeReport" class="space-y-1 text-xs max-h-48 overflow-y-auto pr-1">
+              </div>
+
+              <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between gap-1.5">
+                <span class="text-[10px] text-slate-400 font-mono" id="lblQtdPrioridadesReport">Todas ativas</span>
+                <button 
+                  type="button" 
+                  onclick="app.fecharPrioridadeReportDropdown()" 
+                  class="px-2.5 py-1 bg-slate-900 text-white rounded-md text-[10px] font-semibold hover:bg-slate-800 active:scale-95 transition"
+                >
+                  Aplicar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Status Geral (Multisseleção) -->
+          <div class="relative shrink-0">
+            <button 
+              id="btnToggleStatusReportDropdown"
+              type="button"
+              onclick="app.toggleStatusReportDropdown(event)"
+              class="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs gap-1.5 shadow-2xs hover:border-slate-300 transition active:scale-95 text-slate-700 shrink-0 font-medium"
+              title="Selecione um ou mais status para filtrar"
+            >
+              <i class="fa-solid fa-layer-group text-slate-400 text-[10px]"></i>
+              <span class="text-slate-500 text-[11px]">Status:</span>
+              <span id="lblStatusReportSelecionado" class="font-semibold text-slate-800 max-w-[85px] truncate inline-block align-bottom">Todos</span>
+              <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-0.5"></i>
+            </button>
+
+            <div 
+              id="dropdownStatusReport" 
+              class="hidden absolute right-0 sm:left-0 mt-1.5 w-56 bg-white rounded-xl shadow-xl border border-slate-200 p-2.5 z-40 space-y-2 animate-modal"
+            >
+              <div class="flex items-center justify-between pb-1.5 border-b border-slate-100 text-[11px]">
+                <span class="font-semibold text-slate-700">Filtrar Status</span>
+                <div class="flex items-center gap-1.5">
+                  <button 
+                    type="button" 
+                    onclick="app.selecionarTodosStatusReport(true)" 
+                    class="text-emerald-700 hover:underline font-medium text-[10px]"
+                  >
+                    Todos
+                  </button>
+                  <span class="text-slate-300">•</span>
+                  <button 
+                    type="button" 
+                    onclick="app.selecionarTodosStatusReport(false)" 
+                    class="text-slate-500 hover:underline font-medium text-[10px]"
+                  >
+                    Limpar
+                  </button>
+                </div>
+              </div>
+
+              <div id="listaCheckboxesStatusReport" class="space-y-1 text-xs max-h-48 overflow-y-auto pr-1">
+              </div>
+
+              <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between gap-1.5">
+                <span class="text-[10px] text-slate-400 font-mono" id="lblQtdStatusReport">Todos ativos</span>
+                <button 
+                  type="button" 
+                  onclick="app.fecharStatusReportDropdown()" 
+                  class="px-2.5 py-1 bg-slate-900 text-white rounded-md text-[10px] font-semibold hover:bg-slate-800 active:scale-95 transition"
+                >
+                  Aplicar
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- 5. Filtro por Fase / Nome da Etapa (Multisseleção) -->
+          <div class="relative shrink-0">
+            <button 
+              id="btnToggleStatusEtapaReportDropdown"
+              type="button"
+              onclick="app.toggleStatusEtapaReportDropdown(event)"
+              class="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs gap-1.5 shadow-2xs hover:border-slate-300 transition active:scale-95 text-slate-700 shrink-0 font-medium"
+              title="Selecione uma ou mais fases para filtrar"
+            >
+              <i class="fa-solid fa-code-branch text-slate-400 text-[10px]"></i>
+              <span class="text-slate-500 text-[11px]">Fase:</span>
+              <span id="lblStatusEtapaReportSelecionado" class="font-semibold text-slate-800 max-w-[85px] truncate inline-block align-bottom">Todas</span>
+              <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-0.5"></i>
+            </button>
+
+            <div 
+              id="dropdownStatusEtapaReport" 
+              class="hidden absolute right-0 sm:left-0 mt-1.5 w-56 bg-white rounded-xl shadow-xl border border-slate-200 p-2.5 z-40 space-y-2 animate-modal"
+            >
+              <div class="flex items-center justify-between pb-1.5 border-b border-slate-100 text-[11px]">
+                <span class="font-semibold text-slate-700">Fases da Etapa</span>
+                <div class="flex items-center gap-1.5">
+                  <button 
+                    type="button" 
+                    onclick="app.selecionarTodosStatusEtapaReport(true)" 
+                    class="text-emerald-700 hover:underline font-medium text-[10px]"
+                  >
+                    Todas
+                  </button>
+                  <span class="text-slate-300">•</span>
+                  <button 
+                    type="button" 
+                    onclick="app.selecionarTodosStatusEtapaReport(false)" 
+                    class="text-slate-500 hover:underline font-medium text-[10px]"
+                  >
+                    Limpar
+                  </button>
+                </div>
+              </div>
+
+              <div id="listaCheckboxesStatusEtapaReport" class="space-y-1 text-xs max-h-48 overflow-y-auto pr-1">
+              </div>
+
+              <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between gap-1.5">
+                <span class="text-[10px] text-slate-400 font-mono" id="lblQtdStatusEtapaReport">Todas ativas</span>
+                <button 
+                  type="button" 
+                  onclick="app.fecharStatusEtapaReportDropdown()" 
+                  class="px-2.5 py-1 bg-slate-900 text-white rounded-md text-[10px] font-semibold hover:bg-slate-800 active:scale-95 transition"
+                >
+                  Aplicar
+                </button>
+              </div>
+            </div>
+          </div> 
+          <!-- 6. Filtro por Período (Data Início e Data Fim) -->
+          <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 shadow-2xs">
+            <i class="fa-regular fa-calendar text-slate-400 text-[11px]"></i>
+            <span class="text-slate-500 text-[11px] font-medium hidden sm:inline">Período:</span>
+            
+            <input 
+              type="date" 
+              id="filtroDataInicioReport" 
+              onchange="app.aplicarFiltrosReport()" 
+              class="bg-transparent border-0 text-slate-700 text-xs font-mono outline-none cursor-pointer"
+              title="Data de Início"
+              aria-label="Filtrar por Data de Início no Report"
+            >
+            <span class="text-slate-400 text-[10px]">até</span>
+            <input 
+              type="date" 
+              id="filtroDataFimReport" 
+              onchange="app.aplicarFiltrosReport()" 
+              class="bg-transparent border-0 text-slate-700 text-xs font-mono outline-none cursor-pointer"
+              title="Data de Fim"
+              aria-label="Filtrar por Data de Fim no Report"
+            >
+            <button 
+              type="button" 
+              id="btnLimparDatasReport" 
+              onclick="if(app.reportComponent) app.reportComponent.limparFiltroDatas()" 
+              class="hidden text-slate-400 hover:text-rose-600 transition p-0.5" 
+              title="Limpar período"
+            >
+              <i class="fa-solid fa-xmark text-[11px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="flex items-center gap-2 shrink-0">
+          <button 
+            type="button" 
+            onclick="app.toggleExpandirTodasReport(true)" 
+            class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition shadow-2xs flex items-center gap-1.5"
+            title="Expandir todas as etapas"
+          >
+            <i class="fa-solid fa-angles-down text-[10px] text-slate-400"></i>
+            <span class="hidden sm:inline">Expandir</span>
+          </button>
+
+          <button 
+            type="button" 
+            onclick="app.toggleExpandirTodasReport(false)" 
+            class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition shadow-2xs flex items-center gap-1.5"
+            title="Recolher todas as etapas"
+          >
+            <i class="fa-solid fa-angles-up text-[10px] text-slate-400"></i>
+            <span class="hidden sm:inline">Recolher</span>
+          </button>
+
+          <button 
+            type="button" 
+            onclick="app.abrirModalConfigColunasReport()" 
+            class="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold transition shadow-2xs flex items-center gap-2"
+          >
+            <i class="fa-solid fa-sliders text-emerald-600 text-xs"></i>
+            <span>Colunas</span>
+          </button>
+
+          <button 
+            type="button" 
+            onclick="app.abrirModalVisaoExecutiva()" 
+            class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white text-xs font-semibold transition shadow-2xs flex items-center gap-2 active:scale-95"
+            title="Abrir Apresentação e Resumo Executivo das Cadeias de Valor"
+          >
+            <i class="fa-solid fa-chart-line text-xs text-indigo-200"></i>
+            <span>Visão Executiva</span>
+          </button>
+
+          <button 
+            type="button" 
+            onclick="app.exportarExcelReport()" 
+            class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition shadow-2xs flex items-center gap-2 active:scale-95"
+          >
+            <i class="fa-solid fa-file-excel text-xs"></i>
+            <span>Exportar Excel</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Área de Dados: Tabela Flexível com Rolagem Horizontal Fluida -->
+      <div class="flex-1 overflow-hidden p-3 sm:p-4 flex flex-col min-h-0">
+        <div class="bg-white border border-slate-200 rounded-xl shadow-2xs overflow-hidden flex-1 flex flex-col min-h-0">
+          
+          <div class="flex-1 overflow-x-auto overflow-y-auto scrollbar-thin">
+            <table class="w-full text-left border-collapse text-xs min-w-max">
+              <thead id="theadReport" class="bg-slate-100/90 text-slate-700 uppercase font-semibold text-[10px] tracking-wider border-b border-slate-200 select-none sticky top-0 z-10 backdrop-blur-xs">
+              </thead>
+              <tbody id="tbodyReport" class="divide-y divide-slate-100">
+              </tbody>
+            </table>
+            <div id="emptyReport" class="hidden py-16 text-center text-slate-400 space-y-1">
+              <i class="fa-solid fa-inbox text-2xl text-slate-300"></i>
+              <p class="text-xs font-medium text-slate-600">Nenhuma atividade localizada com os filtros selecionados.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rodapé com Paginação e Contador de Registros -->
+      <div class="p-2.5 sm:p-3 bg-white border-t border-slate-200/90 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0">
+        
+        <div class="flex items-center flex-wrap gap-2.5">
+          <div class="flex items-center gap-1.5 text-slate-500 text-[11px]">
+            <label for="selectItensPorPaginaReport" class="select-none">Exibir:</label>
+            <select 
+              id="selectItensPorPaginaReport" 
+              onchange="app.mudarItensPorPaginaReport(this.value)"
+              class="px-2 py-1 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:ring-1 focus:ring-emerald-500 text-slate-700 font-semibold cursor-pointer outline-none transition hover:bg-slate-100 shadow-2xs"
+            >
+              <option value="10" selected>10 por página</option>
+              <option value="20">20 por página</option>
+              <option value="30">30 por página</option>
+              <option value="50">50 por página</option>
+              <option value="100">100 por página</option>
+              <option value="todos">Todas</option>
+            </select>
+          </div>
+
+          <span class="text-slate-300 select-none">|</span>
+          <span id="lblContadorReport" class="text-[11px] text-slate-600 font-medium">Exibindo 0 a 0 de 0 atividades</span>
+        </div>
+
+        <div id="containerPaginacaoReportBotoes" class="flex items-center gap-1">
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAIS GLOBAIS (FORA DO MAIN PARA EVITAR HERANÇA DE DISPLAY: HIDDEN)     -->
+  <!-- ========================================================================= -->
+
+  <!-- ================= MODAL: SELETOR DE COLUNAS DO REPORT ================= -->
+  <div 
+    id="modalColunasReport" 
+    onclick="if(event.target === this) app.fecharModalConfigColunasReport()" 
+    class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4" 
+    role="dialog" 
+    aria-modal="true"
+  >
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-modal">
+      
+      <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-sm shadow-2xs">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <div>
+            <h3 class="font-semibold text-slate-900 text-sm">Personalizar Colunas do Relatório</h3>
+            <p class="text-[11px] text-slate-500">Escolha quais campos serão visíveis na linha principal e na expansão de etapas</p>
+          </div>
+        </div>
+        <button type="button" onclick="app.fecharModalConfigColunasReport()" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition hover:bg-slate-100">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <div class="p-5 space-y-5 overflow-y-auto flex-1 text-xs">
+        
+        <!-- Seção 1: Colunas da Demanda (Linha Principal) -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between border-b border-slate-200/80 pb-1.5">
+            <span class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+              <i class="fa-solid fa-list-check text-emerald-600"></i> Colunas da Atividade (Linha Mestre)
+            </span>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="app.marcarTodasColunasReport('master', true)" class="text-[11px] text-emerald-600 hover:underline font-medium">Todas</button>
+              <span class="text-slate-300">•</span>
+              <button type="button" onclick="app.marcarTodasColunasReport('master', false)" class="text-[11px] text-slate-500 hover:underline font-medium">Nenhuma</button>
+            </div>
+          </div>
+          <div id="gradeCheckboxesColunasMaster" class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          </div>
+        </div>
+
+        <!-- Seção 2: Colunas das Etapas (Linha Sanfonada) -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between border-b border-slate-200/80 pb-1.5">
+            <span class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+              <i class="fa-solid fa-code-branch text-emerald-600"></i> Colunas das Etapas (Sub-tabela Expandida)
+            </span>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="app.marcarTodasColunasReport('etapas', true)" class="text-[11px] text-emerald-600 hover:underline font-medium">Todas</button>
+              <span class="text-slate-300">•</span>
+              <button type="button" onclick="app.marcarTodasColunasReport('etapas', false)" class="text-[11px] text-slate-500 hover:underline font-medium">Nenhuma</button>
+            </div>
+          </div>
+          <div id="gradeCheckboxesColunasEtapas" class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
+        <button type="button" onclick="app.restaurarColunasPadraoReport()" class="text-xs text-slate-500 hover:text-slate-800 font-medium transition underline">
+          Restaurar Padrão
+        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="app.fecharModalConfigColunasReport()" class="px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-medium transition text-xs shadow-2xs">
+            Cancelar
+          </button>
+          <button type="button" onclick="app.salvarConfigColunasReport()" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition text-xs shadow-2xs active:scale-95">
+            Aplicar e Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: PREVIEW DE CÉLULAS DO EXCEL (3 ABAS) ================= -->
+  <div 
+    id="modalPreviewExcel" 
+    onclick="if(event.target === this) app.fecharModalPreviewExcel()"
+    class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4" 
+    role="dialog" 
+    aria-modal="true" 
+    aria-labelledby="modalPreviewTitulo"
+  >
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-5xl max-h-[85vh] flex flex-col overflow-hidden animate-modal">
+      
+      <div class="bg-slate-900 text-white p-3.5 flex items-center justify-between shrink-0 select-none">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-2xs">
+            <i class="fa-solid fa-file-excel"></i>
+          </div>
+          <div>
+            <h4 id="modalPreviewTitulo" class="font-semibold text-xs text-white">Visualizador da Estrutura Física do Excel (.xlsx)</h4>
+            <div class="flex items-center gap-1.5 mt-1">
+              <span class="text-[10px] text-slate-400 mr-1">Abas físicas:</span>
+              <button type="button" onclick="app.alternarAbaPreview('tb_Atividades')" id="btnAbaPreviewAtividades" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-600 text-white font-semibold transition">1. tb_Atividades</button>
+              <button type="button" onclick="app.alternarAbaPreview('tb_Detalhes_ID')" id="btnAbaPreviewDetalhes" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white transition">2. tb_Detalhes_ID</button>
+              <button type="button" onclick="app.alternarAbaPreview('tb_Configuracoes')" id="btnAbaPreviewConfig" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white transition">3. tb_Configuracoes</button>
+            </div>
+          </div>
+        </div>
+        <button type="button" onclick="app.fecharModalPreviewExcel()" class="text-slate-400 hover:text-white p-1 rounded-lg text-sm transition hover:bg-slate-800" aria-label="Fechar pré-visualização">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="bg-slate-50 border-b border-slate-200 px-3 py-1.5 flex items-center gap-2 text-xs select-none">
+        <span class="text-slate-400 font-serif italic font-bold text-xs">fx</span>
+        <div id="previewFormulaBar" class="bg-white border border-slate-200 px-2 py-0.5 rounded text-[11px] font-mono text-slate-700 flex-1 truncate">
+          =TABLE[...]
+        </div>
+      </div>
+
+      <div class="flex-1 overflow-auto p-3 bg-slate-100">
+        <div class="bg-white border border-slate-200 rounded-lg shadow-2xs overflow-hidden">
+          <table class="w-full border-collapse text-xs table-fixed">
+            <thead id="previewExcelGridHead" class="bg-slate-100 text-slate-600 font-mono text-[10px] border-b border-slate-200 select-none">
+            </thead>
+            <tbody id="previewExcelGridBody" class="font-mono text-[11px] divide-y divide-slate-100 text-slate-700">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="p-3 bg-white border-t border-slate-200 flex items-center justify-between text-xs shrink-0">
+        <span class="text-slate-500 text-[11px]">Todos os dados das 3 abas sincronizam com o arquivo .xlsx local.</span>
+        <button type="button" onclick="app.fecharModalPreviewExcel()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-medium transition">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: RELATÓRIO EXECUTIVO DE ETAPAS FORA DO PRAZO ================= -->
+  <div 
+    id="modalRelatorioAtrasos" 
+    onclick="if(event.target === this) app.fecharModalRelatorioAtrasos()"
+    class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center hidden p-3 sm:p-5" 
+    role="dialog" 
+    aria-modal="true" 
+    aria-labelledby="modalRelatorioAtrasosTitulo"
+  >
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl overflow-hidden transform transition-all animate-modal max-h-[92vh] flex flex-col">
+      
+      <div class="px-5 py-3.5 bg-red-50/70 border-b border-red-100 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-red-600 text-white flex items-center justify-center text-sm shadow-2xs">
+            <i class="fa-solid fa-calendar-xmark"></i>
+          </div>
+          <div>
+            <h3 id="modalRelatorioAtrasosTitulo" class="font-semibold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+              <span>Relatório de Demandas Fora do Prazo (Etapas)</span>
+              <span id="badgeQtdAtrasosModal" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-red-100 text-red-800 font-bold">0 itens</span>
+            </h3>
+            <p class="text-[11px] text-slate-500">Gargalos com data programada de etapa expirada em relação à data atual</p>
+          </div>
+        </div>
+        <button type="button" onclick="app.fecharModalRelatorioAtrasos()" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition hover:bg-white" aria-label="Fechar relatório">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <div class="px-5 py-2.5 bg-slate-50 border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0">
+        <div class="flex items-center gap-3 text-slate-600 text-[11px]">
+          <span>Ordenação: <strong class="text-slate-800">Maior tempo de atraso</strong></span>
+          <span class="text-slate-300">|</span>
+          <span id="lblResumoMediaAtraso">Média de atraso: <strong>-- dias</strong></span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button 
+            type="button" 
+            onclick="app.irParaAtividadesForaDoPrazoAPartirDoModal()"
+            class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-[11px] font-medium transition active:scale-95 shadow-2xs flex items-center gap-1.5"
+            title="Abrir este filtro na visualização detalhada em tabela"
+          >
+            <i class="fa-solid fa-table-list text-slate-500"></i>
+            <span>Ver na Tabela</span>
+          </button>
+          <button 
+            type="button" 
+            id="btnBaixarRelatorioExcel"
+            onclick="app.baixarRelatorioAtrasosExcel()"
+            class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-semibold transition active:scale-95 shadow-2xs flex items-center gap-1.5"
+            title="Baixar planilha formatada para envio à gerência"
+          >
+            <i class="fa-solid fa-file-excel text-xs"></i>
+            <span>Baixar Relatório (.xlsx)</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="corpoRelatorioAtrasos" class="p-4 sm:p-5 overflow-y-auto space-y-3 text-xs flex-1">
+      </div>
+
+      <div class="px-5 py-3 bg-slate-50/90 border-t border-slate-200 flex items-center justify-between text-xs shrink-0">
+        <span class="text-[11px] text-slate-500">Posicionamento calculado em relação à data atual.</span>
+        <button 
+          type="button" 
+          onclick="app.fecharModalRelatorioAtrasos()" 
+          class="px-4 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-xs font-medium transition active:scale-95 shadow-2xs"
+        >
+          Fechar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= MODAL: DETALHES COMPLETOS DO ID ================= -->
+  <div 
+    id="modalDetalhesId" 
+    class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center hidden p-3 sm:p-5 lg:p-6" 
+    role="dialog" 
+    aria-modal="true" 
+    aria-labelledby="detalheTitulo"
+  >
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-5xl overflow-hidden transform transition-all animate-modal max-h-[94vh] flex flex-col">
+      
+      <!-- Cabeçalho Executivo Consolidado -->
+      <div class="p-4 sm:p-4.5 bg-slate-50/95 border-b border-slate-200 flex flex-col gap-2.5 shrink-0 select-none">
+        
+        <!-- Linha 1: ID, Nome da Atividade / Projeto e Prioridade -->
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-center gap-2.5 flex-wrap min-w-0 flex-1">
+            <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-white font-mono font-bold text-xs shadow-2xs shrink-0" id="detalheBadgeIdHeader">
+              --
+            </span>
+            <h3 id="detalheTitulo" class="font-bold text-slate-900 text-sm sm:text-base leading-snug truncate max-w-xl" title="Título da atividade">
+              --
+            </h3>
+            <span id="detalhePrioridadeBadgeHeader" class="shrink-0"></span>
+          </div>
+
+          <button type="button" onclick="app.fecharModalDetalhesId()" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition hover:bg-slate-200/60 shrink-0" aria-label="Fechar detalhes">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <!-- Linha 2: Informações Principais (Cadeia de Valor, Projetos/Frentes, Equipe e Status) -->
+        <div class="flex flex-wrap items-center gap-2 pt-1.5 border-t border-slate-200/80 text-xs">
+          <span class="text-[11px] bg-white border border-emerald-200 px-2.5 py-0.5 rounded-md text-emerald-900 shadow-2xs inline-flex items-center gap-1.5">
+            <span class="text-slate-400 font-medium">Cadeia de Valor:</span>
+            <strong id="detalheMacroCadeiaValor" class="font-semibold text-emerald-800">--</strong>
+          </span>
+
+          <span class="text-[11px] bg-white border border-slate-200 px-2.5 py-0.5 rounded-md text-slate-700 shadow-2xs inline-flex items-center gap-1.5">
+            <span class="text-slate-400 font-medium">Projetos / Frentes:</span>
+            <strong id="detalheCadeiaValor" class="font-semibold text-slate-900">--</strong>
+          </span>
+
+          <span class="text-[11px] bg-white border border-slate-200 px-2.5 py-0.5 rounded-md text-slate-700 shadow-2xs inline-flex items-center gap-1.5">
+            <span class="text-slate-400 font-medium">Equipe:</span>
+            <strong id="detalheEquipe" class="font-semibold text-slate-900">--</strong>
+          </span>
+
+          <span class="text-[11px] bg-white border border-slate-200 px-2.5 py-0.5 rounded-md text-slate-700 shadow-2xs inline-flex items-center gap-1.5">
+            <span class="text-slate-400 font-medium">Status:</span>
+            <strong id="detalheStatus" class="font-semibold text-slate-900">--</strong>
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Corpo da Modal -->
+      <div class="p-4 sm:p-5 overflow-y-auto space-y-4 text-xs flex-1">
+        
+        <!-- Prazos e Responsável Principal -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <div class="bg-slate-50 border border-slate-200/80 p-2.5 rounded-xl">
+            <div class="text-[10px] text-slate-400 font-medium mb-0.5">Responsável</div>
+            <div id="detalheResponsavel" class="font-semibold text-slate-900 truncate">--</div>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200/80 p-2.5 rounded-xl">
+            <div class="text-[10px] text-slate-400 font-medium mb-0.5">Prazo Início</div>
+            <div id="detalhePrazoInicio" class="font-mono font-semibold text-slate-900">--</div>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200/80 p-2.5 rounded-xl">
+            <div class="text-[10px] text-slate-400 font-medium mb-0.5">Prazo Programado</div>
+            <div id="detalhePrazo" class="font-mono font-semibold text-slate-900">--</div>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200/80 p-2.5 rounded-xl">
+            <div class="text-[10px] text-slate-400 font-medium mb-0.5">Mês de Conclusão</div>
+            <div id="detalheConclusao" class="font-mono font-semibold text-slate-900">--</div>
+          </div>
+        </div>
+
+        <!-- Equipe Técnica Responsável -->
+        <div class="border border-slate-200 rounded-xl p-3.5 space-y-2 bg-white shadow-2xs">
+          <div class="text-xs font-semibold text-slate-800 flex items-center gap-1.5 border-b border-slate-100 pb-1.5">
+            <i class="fa-solid fa-laptop-code text-slate-500"></i> Time Técnico Responsável
+          </div>
+          <div class="grid grid-cols-3 gap-2.5 pt-1">
+            <div class="bg-slate-50 border border-slate-200/70 p-2.5 rounded-lg">
+              <div class="text-[10px] text-slate-400 font-medium mb-0.5">Líder Tech Protheus</div>
+              <div id="detalheLiderProtheus" class="font-semibold text-slate-900 truncate">--</div>
+            </div>
+            <div class="bg-slate-50 border border-slate-200/70 p-2.5 rounded-lg">
+              <div class="text-[10px] text-slate-400 font-medium mb-0.5">Líder Tech Webtrade</div>
+              <div id="detalheLiderWebtrade" class="font-semibold text-slate-900 truncate">--</div>
+            </div>
+            <div class="bg-slate-50 border border-slate-200/70 p-2.5 rounded-lg">
+              <div class="text-[10px] text-slate-400 font-medium mb-0.5">Desenvolvedor</div>
+              <div id="detalheDesenvolvedor" class="font-semibold text-slate-900 truncate">--</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloco das Etapas Dinâmicas -->
+        <div class="border border-slate-200 rounded-xl p-3.5 space-y-3 bg-white shadow-2xs">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+            <span class="text-xs font-semibold text-slate-800 flex items-center gap-1.5">
+              <i class="fa-solid fa-code-branch text-emerald-600"></i> Etapas do Ciclo da Demanda
+            </span>
+            <span id="detalheTotalEtapasBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">0 etapas</span>
+          </div>
+
+          <!-- Barra de Filtros e Pesquisa das Etapas -->
+          <div class="flex flex-wrap items-center gap-2 pt-1 pb-1 border-b border-slate-100 bg-slate-50/70 p-2.5 rounded-lg">
+            <div class="relative flex-1 min-w-[170px]">
+              <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]"></i>
+              <input 
+                type="text" 
+                id="filtroBuscaEtapaDetalhes" 
+                oninput="app.filtrarEtapasDetalheModal()" 
+                placeholder="Buscar etapa, fase, obs..." 
+                class="w-full pl-7 pr-2.5 py-1 text-xs bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none transition shadow-2xs"
+                aria-label="Buscar etapas vinculadas"
+              >
+            </div>
+
+            <!-- Filtro de Prioridade da Etapa -->
+            <select 
+              id="filtroPrioridadeEtapaDetalhes" 
+              onchange="app.filtrarEtapasDetalheModal()" 
+              class="px-2.5 py-1 text-xs bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-slate-700 cursor-pointer shadow-2xs transition font-medium"
+              aria-label="Filtrar por prioridade da etapa"
+            >
+              <option value="">Todas as Prioridades</option>
+              <option value="CRITICAS">🔥 Críticas (P0 e P1)</option>
+              <option value="P0 - Crítica">P0 - Crítica</option>
+              <option value="P1 - Alta">P1 - Alta</option>
+              <option value="P2 - Média">P2 - Média</option>
+              <option value="P3 - Baixa">P3 - Baixa</option>
+              <option value="SEM_PRIORIDADE">Sem Prioridade</option>
+            </select>
+
+            <!-- Filtro de Status da Etapa -->
+            <select 
+              id="filtroFaseEtapaDetalhes" 
+              onchange="app.filtrarEtapasDetalheModal()" 
+              class="px-2.5 py-1 text-xs bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none text-slate-700 cursor-pointer shadow-2xs transition font-medium"
+              aria-label="Filtrar por fase ou nome da etapa"
+            >
+              <option value="">Todas as Fases</option>
+            </select>
+
+            <!-- Botão Limpar Filtros das Etapas -->
+            <button 
+              type="button" 
+              id="btnLimparFiltrosEtapaDetalhes" 
+              onclick="app.limparFiltrosEtapasDetalhe()" 
+              class="hidden text-[11px] text-slate-500 hover:text-rose-600 px-2 py-1 rounded transition items-center gap-1"
+              title="Limpar filtros das etapas"
+            >
+              <i class="fa-solid fa-xmark text-[10px]"></i>
+              <span>Limpar</span>
+            </button>
+          </div>
+
+          <div id="detalhesEtapasListaContainer" class="space-y-2.5 max-h-64 overflow-y-auto pr-0.5">
+          </div>
+        </div>
+
+        <!-- Barra de Progresso Geral -->
+        <div class="bg-slate-50 border border-slate-200/80 p-3 rounded-xl space-y-1.5">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-medium text-slate-600">Progresso de Execução</span>
+            <span id="detalheProgressoPct" class="font-mono font-bold text-emerald-700">0%</span>
+          </div>
+          <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+            <div id="detalheProgressoBarra" class="bg-emerald-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Rodapé Fixo -->
+      <div class="p-3.5 sm:p-4 bg-slate-50/90 border-t border-slate-200 flex items-center justify-between gap-3 shrink-0">
+        <span class="text-[11px] text-slate-500">Sincronizado com o arquivo local.</span>
+        <div class="flex items-center gap-2">
+          <button 
+            type="button" 
+            onclick="app.fecharModalDetalhesId()" 
+            class="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition active:scale-95 shadow-2xs"
+          >
+            Fechar
+          </button>
+          <button 
+            type="button" 
+            id="btnEditarPeloDetalhe" 
+            class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition active:scale-95 flex items-center gap-1.5 shadow-2xs"
+          >
+            <i class="fa-solid fa-pen-to-square text-xs text-emerald-400"></i>
+            <span>Editar Demanda</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CRIAÇÃO / EDIÇÃO DE ATIVIDADE ================= -->
+  <div 
+    id="modalFormulario" 
+    class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center hidden p-3 sm:p-5 lg:p-6" 
+    role="dialog" 
+    aria-modal="true" 
+    aria-labelledby="modalTitulo"
+    >
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl sm:max-w-3xl md:max-w-4xl lg:max-w-5xl overflow-hidden transform transition-all animate-modal max-h-[94vh] flex flex-col">
+      
+      <!-- Cabeçalho Fixo -->
+      <div class="px-5 py-3.5 bg-slate-50/90 border-b border-slate-200 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-sm shadow-2xs">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </div>
+          <div>
+            <h3 id="modalTitulo" class="font-semibold text-slate-900 text-sm sm:text-base">Cadastrar Atividade no Excel</h3>
+            <p class="text-[11px] text-slate-500">Preencha os prazos, equipe responsável e etapas sequenciais</p>
+          </div>
+        </div>
+        <button type="button" onclick="app.fecharModalForm()" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition hover:bg-slate-100" aria-label="Fechar formulário">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Formulário com Contentor Flexível Vertical -->
+      <form 
+        id="formRegistro" 
+        onsubmit="app.salvarItemForm(event)" 
+        onkeydown="if(event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') { event.preventDefault(); }"
+        class="flex flex-col flex-1 overflow-hidden min-h-0"
+      >
+        
+        <!-- Área Interna com Rolagem (Scroll) Apenas para os Campos -->
+        <div class="p-5 sm:p-6 space-y-4 text-xs overflow-y-auto flex-1">
+          <input type="hidden" id="inputId" value="101">
+
+          <!-- Linha 1: Título / Atividade -->
+          <div>
+            <label for="inputTitulo" class="block text-slate-700 font-semibold mb-1.5">Título / Atividade</label>
+            <input 
+              type="text" 
+              id="inputTitulo" 
+              required 
+              placeholder="Ex: Release Protheus ou Conciliação de dados" 
+              class="w-full px-3.5 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs shadow-2xs font-medium transition"
+            >
+          </div>
+
+          <!-- Linha 2: Classificação Estratégica (Pai, Frentes e Equipa) -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 bg-slate-50/50 p-3 rounded-xl border border-slate-200/60">
+            <div>
+              <label for="inputMacroCadeiaValor" class="block text-emerald-800 font-semibold mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-diagram-project text-emerald-600 text-[11px]"></i>
+                <span>Cadeia de Valor (Pai)</span>
+              </label>
+              <select 
+                id="inputMacroCadeiaValor" 
+                required 
+                class="w-full px-3 py-2 border border-emerald-300 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-600 bg-white text-slate-800 cursor-pointer text-xs font-semibold shadow-2xs transition"
+              >
+              </select>
+            </div>
+
+            <div>
+              <label for="inputCadeiaValor" class="block text-slate-600 font-semibold mb-1">Projetos / Frentes</label>
+              <select 
+                id="inputCadeiaValor" 
+                required 
+                class="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 cursor-pointer text-xs shadow-2xs transition"
+              >
+              </select>
+            </div>
+
+            <div>
+              <label for="inputEquipe" class="block text-slate-600 font-semibold mb-1">Equipe</label>
+              <select 
+                id="inputEquipe" 
+                required 
+                class="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 cursor-pointer text-xs shadow-2xs transition"
+              >
+              </select>
+            </div>
+          </div>
+
+          <!-- Linha 3: Operação e Execução (Status, Responsável e Prioridade) -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div>
+              <label for="inputStatus" class="block text-slate-600 font-semibold mb-1">Status Geral</label>
+              <select 
+                id="inputStatus" 
+                required
+                class="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 cursor-pointer text-xs font-medium shadow-2xs transition"
+              >
+              </select>
+            </div>
+
+            <div>
+              <label for="inputResponsavel" class="block text-slate-600 font-semibold mb-1">Responsável</label>
+              <input 
+                type="text" 
+                id="inputResponsavel" 
+                required 
+                placeholder="Ex: Carlos Rocha" 
+                class="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs font-medium shadow-2xs transition"
+              >
+            </div>
+
+            <div>
+              <label for="inputPrioridade" class="block text-slate-600 font-semibold mb-1">Prioridade</label>
+              <select 
+                id="inputPrioridade" 
+                required
+                class="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 cursor-pointer text-xs font-medium shadow-2xs transition"
+              >
+                <option value="P0 - Crítica">P0 - Crítica</option>
+                <option value="P1 - Alta">P1 - Alta</option>
+                <option value="P2 - Média" selected>P2 - Média</option>
+                <option value="P3 - Baixa">P3 - Baixa</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Linha 4: Cronograma e Progresso (4 Colunas) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            <div>
+              <label for="inputPrazoInicio" class="block text-slate-600 font-semibold mb-1">Data Início</label>
+              <input 
+                type="date" 
+                id="inputPrazoInicio" 
+                required 
+                class="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 font-mono font-medium text-xs shadow-2xs transition cursor-pointer"
+                title="Selecione a data de início"
+              >
+            </div>
+
+            <div>
+              <label for="inputPrazo" class="block text-slate-600 font-semibold mb-1">Prazo Programado</label>
+              <input 
+                type="date" 
+                id="inputPrazo" 
+                required 
+                class="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 font-mono font-medium text-xs shadow-2xs transition cursor-pointer"
+                title="Selecione a data programada"
+              >
+            </div>
+
+            <div>
+              <label for="inputConclusao" class="block text-slate-600 font-semibold mb-1">Conclusão Efetiva</label>
+              <input 
+                type="date" 
+                id="inputConclusao" 
+                class="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 font-mono font-medium text-xs shadow-2xs transition cursor-pointer"
+                title="Selecione a data de conclusão efetiva"
+              >
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label for="inputProgresso" class="block text-slate-600 font-semibold">Progresso (%)</label>
+                <button 
+                  type="button" 
+                  onclick="app.aplicarPesoEtapaAtual()" 
+                  class="text-[10px] text-emerald-600 hover:text-emerald-800 font-medium flex items-center gap-1 transition" 
+                  title="Recalcular automaticamente baseado no peso da etapa"
+                >
+                  <i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i> Auto
+                </button>
+              </div>
+              <div class="relative">
+                <input 
+                  type="number" 
+                  id="inputProgresso" 
+                  required 
+                  min="0" 
+                  max="100" 
+                  value="0" 
+                  class="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 font-mono text-xs shadow-2xs transition"
+                >
+                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-mono text-xs select-none">%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Linha 5: Liderança Técnica e Desenvolvedor -->
+          <div class="space-y-2.5 bg-slate-50/70 p-3.5 sm:p-4 rounded-xl border border-slate-200/70">
+            <div class="text-[11px] font-semibold text-slate-800 flex items-center gap-1.5">
+              <i class="fa-solid fa-users-gear text-emerald-600"></i> Liderança Técnica & Desenvolvimento
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+              <div>
+                <label for="inputLiderProtheus" class="block text-slate-600 font-medium mb-1">Líder Tech Protheus</label>
+                <input 
+                  type="text" 
+                  id="inputLiderProtheus" 
+                  placeholder="Ex: Douglas Idalgo" 
+                  class="w-full px-3 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs shadow-2xs transition"
+                >
+              </div>
+              <div>
+                <label for="inputLiderWebtrade" class="block text-slate-600 font-medium mb-1">Líder Tech Webtrade</label>
+                <input 
+                  type="text" 
+                  id="inputLiderWebtrade" 
+                  placeholder="Ex: Geydson Santos" 
+                  class="w-full px-3 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs shadow-2xs transition"
+                >
+              </div>
+              <div>
+                <label for="inputDesenvolvedor" class="block text-slate-600 font-medium mb-1">Desenvolvedor</label>
+                <input 
+                  type="text" 
+                  id="inputDesenvolvedor" 
+                  placeholder="Ex: Roberto" 
+                  class="w-full px-3 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs shadow-2xs transition"
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Linha 6: Etapas Sequenciais do Ciclo -->
+          <div class="space-y-3 bg-slate-50/70 p-3.5 sm:p-4 rounded-xl border border-slate-200/70">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
+              <div>
+                <span class="text-[11px] font-semibold text-slate-800 flex items-center gap-1.5">
+                  <i class="fa-solid fa-code-branch text-emerald-600"></i> Etapas Sequenciais do Ciclo da Demanda
+                </span>
+                <p class="text-[10px] text-slate-500">Registre cada fase, datas programada e efetiva de conclusão</p>
+              </div>
+              <button 
+                type="button" 
+                id="btnAdicionarProximaEtapa" 
+                onclick="app.adicionarNovaEtapaSequencial()" 
+                class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-[11px] transition flex items-center gap-1.5 shadow-2xs active:scale-95 cursor-pointer"
+              >
+                <i class="fa-solid fa-plus text-[10px]"></i>
+                <span>+ Próxima Etapa</span>
+              </button>
+            </div>
+
+            <div id="alertaBloqueioProximaEtapa" class="hidden text-[10px] text-amber-700 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-info text-amber-600"></i>
+              <span>Para adicionar a próxima etapa do ciclo, informe um título para a etapa ou marque-a como concluída.</span>
+            </div>
+
+            <div id="containerEtapasSequenciais" class="space-y-2.5">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Rodapé Fixo na Base do Modal -->
+        <div class="px-5 py-3 sm:px-6 bg-slate-50/90 border-t border-slate-200 flex items-center justify-between gap-2.5 shrink-0">
+          <button 
+            type="button" 
+            id="btnAdicionarProximaEtapaFixo" 
+            onclick="app.adicionarNovaEtapaSequencial()" 
+            class="px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 font-semibold text-xs transition flex items-center gap-1.5 shadow-2xs active:scale-95 cursor-pointer"
+          >
+            <i class="fa-solid fa-plus text-xs text-emerald-600"></i>
+            <span>+ Próxima Etapa</span>
+          </button>
+
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="app.fecharModalForm()" class="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-medium transition text-xs shadow-2xs">
+              Cancelar
+            </button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition flex items-center gap-2 shadow-2xs text-xs active:scale-95">
+              <i class="fa-solid fa-floppy-disk text-xs"></i>
+              <span>Salvar no Excel</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: EDIÇÃO RÁPIDA DE ETAPA INDIVIDUAL ================= -->
+  <div 
+    id="modalEdicaoEtapaIndividual" 
+    onclick="if(event.target === this) app.fecharModalEdicaoEtapaIndividual()" 
+    class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-3 sm:p-5" 
+    role="dialog" 
+    aria-modal="true"
+  >
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden transform transition-all animate-modal flex flex-col max-h-[92vh]">
+      
+      <!-- Cabeçalho -->
+      <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs shadow-2xs">
+            <i class="fa-solid fa-code-branch"></i>
+          </div>
+          <div>
+            <h3 id="modalEdicaoEtapaTitulo" class="font-semibold text-slate-900 text-sm">Editar Etapa da Demanda</h3>
+            <p class="text-[11px] text-slate-500" id="subtituloEdicaoEtapaModal">Demanda #--</p>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          onclick="app.fecharModalEdicaoEtapaIndividual()" 
+          class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition hover:bg-slate-100 cursor-pointer" 
+          aria-label="Fechar"
+        >
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Formulário -->
+      <form id="formEdicaoEtapaIndividual" onsubmit="app.salvarEdicaoEtapaIndividual(event)" class="p-5 space-y-3.5 text-xs overflow-y-auto flex-1">
+        <input type="hidden" id="editEtapaAtividadeId" value="">
+        <input type="hidden" id="editEtapaIndex" value="">
+
+        <!-- Título da Etapa -->
+        <div>
+          <label for="editEtapaTitulo" class="block text-slate-700 font-semibold mb-1">Título da Etapa</label>
+          <input 
+            type="text" 
+            id="editEtapaTitulo" 
+            placeholder="Ex: Alinhamento de escopo técnico" 
+            class="w-full px-3 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-white text-slate-800 text-xs shadow-2xs font-medium"
+          >
+        </div>
+
+        <!-- Fase / Nome da Etapa & Prioridade -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label for="editEtapaNome" class="block text-slate-700 font-semibold mb-1">Fase / Nome da Etapa</label>
+            <select 
+              id="editEtapaNome" 
+              required
+              class="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-white text-slate-800 text-xs font-medium cursor-pointer shadow-2xs"
+            ></select>
+          </div>
+          <div>
+            <label for="editEtapaPrioridade" class="block text-slate-700 font-semibold mb-1">Prioridade da Etapa</label>
+            <select 
+              id="editEtapaPrioridade" 
+              class="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-white text-slate-800 text-xs font-medium cursor-pointer shadow-2xs"
+            >
+              <option value="">Sem prioridade específica</option>
+              <option value="P0 - Crítica">P0 - Crítica</option>
+              <option value="P1 - Alta">P1 - Alta</option>
+              <option value="P2 - Média">P2 - Média</option>
+              <option value="P3 - Baixa">P3 - Baixa</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Responsável da Etapa -->
+        <div>
+          <label for="editEtapaResponsavel" class="block text-slate-700 font-semibold mb-1">Responsável da Etapa</label>
+          <input 
+            type="text" 
+            id="editEtapaResponsavel" 
+            placeholder="Ex: Carlos / Dev" 
+            class="w-full px-3 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-white text-slate-800 text-xs shadow-2xs font-medium"
+          >
+        </div>
+
+        <!-- Bloco de Precedência / Dependência -->
+        <div class="bg-indigo-50/40 border border-indigo-200/80 rounded-xl p-3 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-indigo-900 flex items-center gap-1.5">
+              <i class="fa-solid fa-link text-indigo-600 text-[11px]"></i> Precedência / Dependência
+            </span>
+            <span class="text-[10px] text-slate-400">Opcional</span>
+          </div>
+
+          <div>
+            <label for="editEtapaDependenciaTipo" class="block text-slate-600 font-medium text-[11px] mb-1">Tipo de Vínculo</label>
+            <select 
+              id="editEtapaDependenciaTipo" 
+              onchange="app.aoMudarTipoDependenciaModalRapida(this.value)"
+              class="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500/20 bg-white text-slate-800 text-xs font-medium cursor-pointer shadow-2xs"
+            >
+              <option value="">Nenhuma (Etapa Independente)</option>
+              <option value="PREDECESSORA">Predecessora (Esta etapa depende de outra)</option>
+              <option value="ANTECESSORA">Antecessora / Sucessora (Outra etapa depende desta)</option>
+            </select>
+          </div>
+
+          <!-- Campos exibidos dinamicamente se houver vínculo selecionado -->
+          <div id="boxCamposVinculoDependencia" class="hidden flex-col sm:flex-row gap-2.5 pt-1">
+            <div class="flex-1">
+              <label for="editEtapaDepAtividadeId" class="block text-slate-600 font-medium text-[11px] mb-1">Demanda Vinculada</label>
+              <select 
+                id="editEtapaDepAtividadeId" 
+                onchange="app.aoMudarAtividadeDependenciaModalRapida(this.value)"
+                class="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500/20 bg-white text-slate-800 text-xs cursor-pointer shadow-2xs font-medium"
+              ></select>
+            </div>
+            <div class="flex-1">
+              <label for="editEtapaDepEtapaNome" class="block text-slate-600 font-medium text-[11px] mb-1">Etapa Vinculada</label>
+              <select 
+                id="editEtapaDepEtapaNome" 
+                class="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500/20 bg-white text-slate-800 text-xs cursor-pointer shadow-2xs font-medium"
+              ></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Datas da Etapa -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div>
+            <label for="editEtapaDataInicio" class="block text-slate-600 font-medium mb-1">Data Início</label>
+            <input 
+              type="date" 
+              id="editEtapaDataInicio" 
+              class="w-full px-2 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-white text-slate-800 font-mono text-[11px] shadow-2xs cursor-pointer"
+            >
+          </div>
+          <div>
+            <label for="editEtapaDataProgramada" class="block text-slate-600 font-medium mb-1">Data Programada</label>
+            <input 
+              type="date" 
+              id="editEtapaDataProgramada" 
+              class="w-full px-2 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-white text-slate-800 font-mono text-[11px] shadow-2xs cursor-pointer"
+            >
+          </div>
+          <div>
+            <label for="editEtapaDataEntrega" class="block text-slate-600 font-medium mb-1">Data de Entrega</label>
+            <input 
+              type="date" 
+              id="editEtapaDataEntrega" 
+              class="w-full px-2 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-white text-slate-800 font-mono text-[11px] shadow-2xs cursor-pointer"
+            >
+          </div>
+        </div>
+
+        <!-- Marcar como Concluída -->
+        <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5 flex items-center justify-between">
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input 
+              type="checkbox" 
+              id="editEtapaConcluida" 
+              onchange="app.aoAlternarConclusaoModalEtapaRapida(this.checked)"
+              class="rounded text-emerald-600 focus:ring-0 cursor-pointer h-4 w-4"
+            >
+            <span class="text-xs font-semibold text-slate-800">Marcar etapa como concluída</span>
+          </label>
+          <span class="text-[10px] text-slate-400">Preenche a data com hoje se vazia</span>
+        </div>
+
+        <!-- Observações -->
+        <div>
+          <label for="editEtapaObs" class="block text-slate-600 font-medium mb-1">Observações da Etapa</label>
+          <textarea 
+            id="editEtapaObs" 
+            rows="2" 
+            maxlength="500" 
+            placeholder="Dependências, bloqueios ou observações técnicas..."
+            class="w-full px-3 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-white text-slate-800 text-xs shadow-2xs resize-y leading-relaxed"
+          ></textarea>
+        </div>
+
+        <!-- Rodapé da Modal -->
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+          <button 
+            type="button" 
+            onclick="app.fecharModalEdicaoEtapaIndividual()" 
+            class="px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium shadow-2xs transition active:scale-95 cursor-pointer"
+          >
+            Cancelar
+          </button>
+          <button 
+            type="submit" 
+            class="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-2xs transition active:scale-95 flex items-center gap-1.5 cursor-pointer"
+          >
+            <i class="fa-solid fa-floppy-disk text-[11px]"></i>
+            <span>Salvar Etapa</span>
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CONFIGURAÇÕES DA PLANILHA ================= -->
+  <div 
+    id="modalConfiguracoes" 
+    onclick="if(event.target === this) app.fecharModalConfiguracoes()"
+    class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4" 
+    role="dialog" 
+    aria-modal="true" 
+    aria-labelledby="modalConfigTitulo"
+  >
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-xl overflow-hidden animate-modal flex flex-col max-h-[90vh]">
+      
+      <div class="p-4 bg-slate-50/90 border-b border-slate-200 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center text-xs shadow-2xs">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <div>
+            <h3 id="modalConfigTitulo" class="font-semibold text-slate-900 text-sm">Configurações da Planilha Excel</h3>
+            <p class="text-[11px] text-slate-500">Gravadas na aba física <code class="font-mono text-emerald-700 font-semibold">tb_Configuracoes</code></p>
+          </div>
+        </div>
+        <button type="button" onclick="app.fecharModalConfiguracoes()" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition hover:bg-slate-100" aria-label="Fechar configurações">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-5 overflow-y-auto space-y-5 text-xs">
+        
+        <div class="space-y-3">
+          <h4 class="font-semibold text-slate-900 text-xs flex items-center gap-2">
+            <i class="fa-regular fa-building text-slate-400"></i> Parâmetros Gerais do Projeto
+          </h4>
+          
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label for="cfgOrganizacao" class="block text-slate-600 font-medium mb-1">Nome da Organização / Projeto</label>
+              <input 
+                type="text" 
+                id="cfgOrganizacao" 
+                class="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800"
+                placeholder="Ex: Prioridades dos Projetos BRG"
+              >
+            </div>
+            <div>
+              <label for="cfgCiclo" class="block text-slate-600 font-medium mb-1">Ciclo / Sprint de Planejamento</label>
+              <input 
+                type="text" 
+                id="cfgCiclo" 
+                class="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800"
+                placeholder="Ex: Ciclo Q4 2026"
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-2.5 pt-3 border-t border-slate-100">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-slate-900 text-xs flex items-center gap-2">
+              <i class="fa-solid fa-bars-staggered text-emerald-600"></i> Ordenação e Nomes de Status
+            </h4>
+            <span class="text-[10px] text-slate-400" id="badgeTotalStatus">0 status</span>
+          </div>
+
+          <div id="containerTagsStatus" class="space-y-1.5 p-2.5 bg-slate-50 border border-slate-200/80 rounded-xl max-h-48 overflow-y-auto">
+          </div>
+
+          <div class="flex items-center gap-2 pt-1">
+            <input 
+              type="text" 
+              id="inputNovoStatus" 
+              placeholder="Nome de novo status..." 
+              class="flex-1 px-3 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs shadow-2xs"
+              onkeydown="if(event.key === 'Enter') { event.preventDefault(); app.adicionarStatusConfig(); }"
+              aria-label="Adicionar novo status"
+            >
+            <button 
+              type="button" 
+              onclick="app.adicionarStatusConfig()" 
+              class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg text-xs transition active:scale-95 flex items-center gap-1.5 shadow-2xs shrink-0"
+            >
+              <i class="fa-solid fa-plus text-[10px] text-emerald-400"></i>
+              <span>Adicionar Status</span>
+            </button>
+          </div>
+          <!-- ================= SEÇÃO: PRIORIDADES DO SISTEMA ================= -->
+        <div class="space-y-2.5 pt-3 border-t border-slate-100">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-slate-900 text-xs flex items-center gap-2">
+              <i class="fa-solid fa-flag text-rose-600"></i> Prioridades do Sistema
+            </h4>
+            <span class="text-[10px] text-slate-400" id="badgeTotalPrioridades">0 cadastradas</span>
+          </div>
+
+          <div id="containerTagsPrioridades" class="flex flex-wrap gap-1.5 p-2 bg-slate-50 border border-slate-200/80 rounded-xl min-h-[42px]">
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input 
+              type="text" 
+              id="inputNovaPrioridade" 
+              placeholder="Nova prioridade (ex: P4 - Muito Baixa)..." 
+              class="flex-1 px-3 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs shadow-2xs"
+              onkeydown="if(event.key === 'Enter') { event.preventDefault(); app.adicionarPrioridadeConfig(); }"
+              aria-label="Adicionar nova prioridade"
+            >
+            <button 
+              type="button" 
+              onclick="app.adicionarPrioridadeConfig()" 
+              class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg text-xs transition active:scale-95 flex items-center gap-1.5 shadow-2xs shrink-0"
+            >
+              <i class="fa-solid fa-plus text-[10px] text-emerald-400"></i>
+              <span>Adicionar</span>
+            </button>
+          </div>
+        </div>
+        </div>
+
+        <!-- ================= SEÇÃO: ETAPAS COM AUTO-DISTRIBUIR ================= -->
+        <div class="space-y-2.5 pt-3 border-t border-slate-100">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h4 class="font-semibold text-slate-900 text-xs flex items-center gap-2">
+              <i class="fa-solid fa-code-branch text-emerald-600"></i> Etapas do Ciclo &amp; Pesos (%)
+            </h4>
+            
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="text-[10px] text-slate-400 mr-1" id="badgeTotalEtapas">0 etapas</span>
+              
+              <label class="flex items-center gap-1.5 text-[11px] text-slate-600 font-medium cursor-pointer select-none bg-slate-100 hover:bg-slate-200/70 border border-slate-200/80 px-2.5 py-1 rounded-lg transition" title="Recalcular automaticamente de 0% a 100% ao adicionar, mover ou remover etapas">
+                <input type="checkbox" id="chkPesosAutomaticos" checked class="rounded text-emerald-600 focus:ring-0 cursor-pointer h-3.5 w-3.5">
+                <span>Auto-distribuir</span>
+              </label>
+
+              <button 
+                type="button" 
+                onclick="app.distribuirPesosEtapas(true)" 
+                class="text-[11px] text-emerald-700 bg-emerald-50 hover:bg-emerald-100 active:scale-95 border border-emerald-200 px-2.5 py-1 rounded-lg font-semibold transition flex items-center gap-1.5 shadow-2xs"
+                title="Recalcular pesos uniformemente (0% a 100%)"
+              >
+                <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
+                <span>Recalcular</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="containerTagsEtapas" class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2.5 bg-slate-50 border border-slate-200/80 rounded-xl max-h-48 overflow-y-auto">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 pt-1">
+            <input 
+              type="text" 
+              id="inputNovaEtapa" 
+              placeholder="Nome da etapa..." 
+              class="sm:col-span-7 px-3 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs shadow-2xs"
+              onkeydown="if(event.key === 'Enter') { event.preventDefault(); app.adicionarEtapaConfig(); }"
+              aria-label="Nome da nova etapa"
+            >
+            <div class="sm:col-span-3 flex items-center bg-white border border-slate-200 rounded-lg px-2 py-1 shadow-2xs">
+              <span class="text-[11px] text-slate-400 mr-1 select-none">Peso:</span>
+              <input 
+                type="number" 
+                id="inputNovoPesoEtapa" 
+                min="0" 
+                max="100" 
+                class="w-full text-xs font-mono font-semibold text-emerald-700 outline-none placeholder:text-slate-300"
+                placeholder="Auto"
+                onkeydown="if(event.key === 'Enter') { event.preventDefault(); app.adicionarEtapaConfig(); }"
+                aria-label="Peso percentual da etapa (ou deixe vazio para cálculo automático)"
+                title="Deixe em branco para cálculo automático proporcional"
+              >
+              <span class="text-[11px] text-slate-400 select-none">%</span>
+            </div>
+            <button 
+              type="button" 
+              onclick="app.adicionarEtapaConfig()" 
+              class="sm:col-span-2 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg text-xs transition active:scale-95 flex items-center justify-center gap-1.5 shadow-2xs shrink-0"
+            >
+              <i class="fa-solid fa-plus text-[10px] text-emerald-400"></i>
+              <span>Adicionar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= SEÇÃO: CADEIA DE VALOR ================= -->
+        <div class="space-y-2.5 pt-3 border-t border-slate-100">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-slate-900 text-xs flex items-center gap-2">
+              <i class="fa-solid fa-diagram-project text-emerald-600"></i> Cadeia de Valor
+            </h4>
+            <span class="text-[10px] text-slate-400" id="badgeTotalCadeiaValor">0 cadastrados</span>
+          </div>
+
+          <div id="containerTagsCadeiaValor" class="flex flex-wrap gap-1.5 p-2 bg-slate-50 border border-slate-200/80 rounded-xl min-h-[42px]">
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input 
+              type="text" 
+              id="inputNovaCadeiaValor" 
+              placeholder="Nova cadeia de valor..." 
+              class="flex-1 px-3 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs shadow-2xs"
+              onkeydown="if(event.key === 'Enter') { event.preventDefault(); app.adicionarCadeiaValorConfig(); }"
+              aria-label="Adicionar nova cadeia de valor"
+            >
+            <button 
+              type="button" 
+              onclick="app.adicionarCadeiaValorConfig()" 
+              class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg text-xs transition active:scale-95 flex items-center gap-1.5 shadow-2xs shrink-0"
+            >
+              <i class="fa-solid fa-plus text-[10px] text-emerald-400"></i>
+              <span>Adicionar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= SEÇÃO: PROJETOS / FRENTES ================= -->
+        <div class="space-y-2.5 pt-3 border-t border-slate-100">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-slate-900 text-xs flex items-center gap-2">
+              <i class="fa-solid fa-sitemap text-slate-400"></i> Projetos / Frentes
+            </h4>
+            <span class="text-[10px] text-slate-400" id="badgeTotalCadeias">0 cadastrados</span>
+          </div>
+
+          <div id="containerTagsCadeias" class="flex flex-wrap gap-1.5 p-2 bg-slate-50 border border-slate-200/80 rounded-xl min-h-[42px]">
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input 
+              type="text" 
+              id="inputNovaCadeia" 
+              placeholder="Novo projeto ou frente..." 
+              class="flex-1 px-3 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs shadow-2xs"
+              onkeydown="if(event.key === 'Enter') { event.preventDefault(); app.adicionarCadeiaConfig(); }"
+              aria-label="Adicionar nova frente ou projeto"
+            >
+            <button 
+              type="button" 
+              onclick="app.adicionarCadeiaConfig()" 
+              class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg text-xs transition active:scale-95 flex items-center gap-1.5 shadow-2xs shrink-0"
+            >
+              <i class="fa-solid fa-plus text-[10px] text-emerald-400"></i>
+              <span>Adicionar</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-2.5 pt-3 border-t border-slate-100">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-slate-900 text-xs flex items-center gap-2">
+              <i class="fa-solid fa-users text-slate-400"></i> Equipes Cadastradas
+            </h4>
+            <span class="text-[10px] text-slate-400" id="badgeTotalEquipes">0 equipes</span>
+          </div>
+
+          <div id="containerTagsEquipes" class="flex flex-wrap gap-1.5 p-2 bg-slate-50 border border-slate-200/80 rounded-xl min-h-[42px]">
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input 
+              type="text" 
+              id="inputNovaEquipe" 
+              placeholder="Nome da nova equipe..." 
+              class="flex-1 px-3 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs shadow-2xs"
+              onkeydown="if(event.key === 'Enter') { event.preventDefault(); app.adicionarEquipeConfig(); }"
+              aria-label="Adicionar nova equipe"
+            >
+            <button 
+              type="button" 
+              onclick="app.adicionarEquipeConfig()" 
+              class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg text-xs transition active:scale-95 flex items-center gap-1.5 shadow-2xs shrink-0"
+            >
+              <i class="fa-solid fa-plus text-[10px] text-emerald-400"></i>
+              <span>Adicionar</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-2.5 pt-3 border-t border-slate-100">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-slate-900 text-xs flex items-center gap-2">
+              <i class="fa-solid fa-calendar-days text-emerald-600"></i> Anos Disponíveis no Roadmap
+            </h4>
+            <span class="text-[10px] text-slate-400" id="badgeTotalAnosConfig">0 anos</span>
+          </div>
+
+          <div id="containerTagsAnosConfig" class="flex flex-wrap gap-1.5 p-2 bg-slate-50 border border-slate-200/80 rounded-xl min-h-[42px]">
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input 
+              type="number" 
+              id="inputNovoAnoConfig" 
+              min="2020" 
+              max="2040" 
+              placeholder="Ex: 2027" 
+              class="flex-1 px-3 py-1.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs shadow-2xs font-mono"
+              onkeydown="if(event.key === 'Enter') { event.preventDefault(); app.adicionarAnoConfig(); }"
+              aria-label="Adicionar ano ao roadmap"
+            >
+            <button 
+              type="button" 
+              onclick="app.adicionarAnoConfig()" 
+              class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg text-xs transition active:scale-95 flex items-center gap-1.5 shadow-2xs shrink-0"
+            >
+              <i class="fa-solid fa-plus text-[10px] text-emerald-400"></i>
+              <span>Adicionar Ano</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="p-3.5 sm:p-4 bg-slate-50/90 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <label class="flex items-center gap-1.5 text-xs text-slate-600 font-medium cursor-pointer select-none" title="Aplica automaticamente o novo percentual em todas as tarefas abertas">
+          <input type="checkbox" id="chkSincronizarAtividades" checked class="rounded text-emerald-600 focus:ring-0 cursor-pointer h-4 w-4">
+          <span>Atualizar progresso das atividades existentes com os novos pesos</span>
+        </label>
+
+        <div class="flex items-center justify-end gap-2 w-full sm:w-auto">
+          <button 
+            type="button" 
+            onclick="app.fecharModalConfiguracoes()" 
+            class="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition active:scale-95 shadow-2xs"
+          >
+            Cancelar
+          </button>
+          <button 
+            type="button" 
+            onclick="app.salvarConfiguracoesForm()" 
+            class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition flex items-center gap-2 shadow-xs active:scale-95"
+          >
+            <i class="fa-solid fa-floppy-disk text-xs"></i>
+            <span>Salvar Configurações</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CONFIRMAÇÃO DE EXCLUSÃO ================= -->
+  <div 
+    id="modalConfirmacaoExclusao" 
+    onclick="if(event.target === this) app.fecharModalExclusao()" 
+    class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4" 
+    role="dialog" 
+    aria-modal="true" 
+    aria-labelledby="modalExclusaoTitulo"
+  >
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200/90 w-full max-w-md overflow-hidden animate-modal">
+      
+      <div class="p-4 sm:p-5 pb-0 flex items-start justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 border border-rose-100 flex items-center justify-center text-base shrink-0 shadow-2xs">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <div>
+            <h3 id="modalExclusaoTitulo" class="font-semibold text-sm sm:text-base text-slate-900 leading-tight">Excluir atividade?</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Confirmação de exclusão da planilha</p>
+          </div>
+        </div>
+        <button type="button" onclick="app.fecharModalExclusao()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition" aria-label="Fechar confirmação">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-5 space-y-3">
+        <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-xs space-y-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <span id="exclusaoIdBadge" class="font-mono font-bold bg-white text-slate-800 border border-slate-200 px-2 py-0.5 rounded text-[11px]">101</span>
+            <span id="exclusaoCadeiaBadge" class="text-[10px] text-slate-500 font-medium bg-slate-200/60 px-2 py-0.5 rounded">Projetos / Frentes</span>
+          </div>
+          <div id="exclusaoTitulo" class="font-medium text-slate-800 leading-relaxed text-xs sm:text-sm">
+            Título da Atividade
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-500 leading-relaxed">
+          Esta linha será removida permanentemente de todas as abas do seu arquivo <span class="font-medium text-slate-700">.xlsx</span> no computador.
+        </p>
+      </div>
+
+      <div class="p-3.5 sm:p-4 bg-slate-50/70 border-t border-slate-100 flex items-center justify-end gap-2.5">
+        <button 
+          type="button" 
+          onclick="app.fecharModalExclusao()" 
+          class="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium shadow-2xs transition active:scale-95"
+        >
+          Cancelar
+        </button>
+        <button 
+          type="button" 
+          id="btnConfirmarExclusao" 
+          class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-xs transition active:scale-95 flex items-center gap-1.5"
+        >
+          <i class="fa-solid fa-trash-can text-xs"></i>
+          <span>Excluir do Excel</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= POPUP: SELETOR DE MÊS/ANO ================= -->
+  <div id="popupSeletorMesAno" class="hidden fixed z-[60] bg-white border border-slate-200 rounded-xl shadow-xl p-3 w-[230px]" style="top:0; left:0;">
+    <div class="flex items-center justify-between gap-1 mb-2">
+      <button 
+        type="button" 
+        id="pickerAnoPrevBtn" 
+        onclick="app.alterarAnoPicker(-1)" 
+        class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition"
+        title="Ano configurado anterior"
+      >
+        <i class="fa-solid fa-chevron-left text-xs"></i>
+      </button>
+      <select 
+        id="pickerAnoSelect" 
+        onchange="app.selecionarAnoPicker(this.value)" 
+        class="flex-1 text-center text-sm font-mono font-semibold text-slate-800 border border-slate-200 rounded-lg py-1 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 cursor-pointer bg-white"
+        title="Anos disponíveis conforme configuração do sistema"
+        aria-label="Selecionar ano do calendário"
+      ></select>
+      <button 
+        type="button" 
+        id="pickerAnoNextBtn" 
+        onclick="app.alterarAnoPicker(1)" 
+        class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition"
+        title="Próximo ano configurado"
+      >
+        <i class="fa-solid fa-chevron-right text-xs"></i>
+      </button>
+    </div>
+
+    <div id="pickerGradeMeses" class="grid grid-cols-3 gap-1 mb-2" aria-label="Grade de meses"></div>
+
+    <div class="flex items-center justify-between gap-1.5 pt-2 border-t border-slate-100">
+      <button type="button" onclick="app.selecionarEsteMesPicker()" class="text-[11px] font-medium text-emerald-600 hover:text-emerald-800 transition">Mês atual</button>
+      <button type="button" onclick="app.limparMesAnoPicker()" class="text-[11px] font-medium text-slate-400 hover:text-rose-500 transition">Limpar</button>
+      <button type="button" onclick="app.fecharPopupMesAno()" class="text-[11px] font-medium text-slate-400 hover:text-slate-700 transition">Fechar</button>
+    </div>
+
+    <p class="text-[10px] text-slate-400 mt-2 leading-snug">Anos disponíveis conforme configuração do sistema (Configurações → Anos do Roadmap).</p>
+  </div>
+
+  <!-- ================= MODAL: VISÃO EXECUTIVA DE PROJETOS ================= -->
+  <div 
+    id="modalVisaoExecutiva" 
+    onclick="if(event.target === this) app.fecharModalVisaoExecutiva()" 
+    class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-3 sm:p-5" 
+    role="dialog" 
+    aria-modal="true" 
+    aria-labelledby="tituloModalVisaoExecutiva"
+  >
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-5xl overflow-hidden animate-modal max-h-[92vh] flex flex-col">
+      <!-- Cabeçalho Fixo -->
+      <div class="px-6 py-3.5 bg-slate-900 text-white flex items-center justify-between shrink-0 select-none">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 text-white flex items-center justify-center text-sm shadow-md">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <div>
+            <h3 id="tituloModalVisaoExecutiva" class="font-bold text-sm sm:text-base tracking-tight text-white flex items-center gap-2">
+              <span>Visão Executiva de Portfólio</span>
+              <span class="text-[10px] bg-indigo-500/30 text-indigo-200 px-2 py-0.5 rounded-full border border-indigo-400/30 font-mono">Executivo</span>
+            </h3>
+            <p id="subtituloModalVisaoExecutiva" class="text-xs text-slate-400">Resumo consolidado e métricas das cadeias de valor</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2.5">
+          <!-- Botão de Baixar Apresentação no Topo -->
+          <button 
+            type="button" 
+            id="btnBaixarApresentacaoTopo"
+            onclick="app.visaoExecutivaComponent.baixarApresentacao()" 
+            class="hidden px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center gap-2 shadow-sm active:scale-95 cursor-pointer"
+            title="Baixar apresentação completa em PDF (2 páginas em modo Paisagem)"
+          >
+            <i class="fa-solid fa-file-pdf text-xs"></i>
+            <span>Baixar Apresentação (PDF)</span>
+          </button>
+
+          <button 
+            type="button" 
+            onclick="app.fecharModalVisaoExecutiva()" 
+            class="text-slate-400 hover:text-white p-1.5 rounded-lg transition hover:bg-slate-800 cursor-pointer"
+            aria-label="Fechar Visão Executiva"
+          >
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Conteúdo Interno com Rolagem Dinâmica -->
+      <div id="conteudoCorpoVisaoExecutiva" class="p-5 sm:p-6 overflow-y-auto flex-1 bg-slate-50/60 text-slate-800">
+      </div>
+
+      <!-- Rodapé Fixo -->
+      <div class="px-6 py-3 bg-white border-t border-slate-200 flex items-center justify-between text-xs shrink-0">
+        <span class="text-[11px] text-slate-500">Dados calculados em tempo real com base no ciclo ativo.</span>
+        <button 
+          type="button" 
+          onclick="app.fecharModalVisaoExecutiva()" 
+          class="px-4 py-1.5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition active:scale-95 shadow-2xs"
+        >
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: LOGIN FIREBASE (E-MAIL E SENHA) ================= -->
+  <div 
+    id="modalLoginFirebase" 
+    class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[70] flex items-center justify-center p-4" 
+    role="dialog" 
+    aria-modal="true" 
+    aria-labelledby="tituloLoginFirebase"
+  >
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-sm overflow-hidden animate-modal">
+      <div class="px-6 py-5 bg-slate-900 text-white flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
+          <i class="fa-solid fa-lock text-sm"></i>
+        </div>
+        <div>
+          <h3 id="tituloLoginFirebase" class="font-bold text-sm tracking-tight">Prioridades dos Projetos BRG</h3>
+          <p class="text-[11px] text-slate-400">Autenticação Firebase Cloud</p>
+        </div>
+      </div>
+
+      <form onsubmit="app.realizarLoginFirebase(event)" class="p-6 space-y-4 text-xs">
+        <div id="loginErroMsg" class="hidden bg-rose-50 border border-rose-200 text-rose-700 px-3 py-2 rounded-lg text-[11px] font-medium"></div>
+
+        <div>
+          <label for="loginEmail" class="block text-slate-700 font-semibold mb-1">E-mail corporativo</label>
+          <input 
+            type="email" 
+            id="loginEmail" 
+            required 
+            autocomplete="email"
+            placeholder="nome@empresa.com.br" 
+            class="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs"
+          >
+        </div>
+
+        <div>
+          <label for="loginSenha" class="block text-slate-700 font-semibold mb-1">Senha</label>
+          <input 
+            type="password" 
+            id="loginSenha" 
+            required 
+            autocomplete="current-password"
+            placeholder="••••••••" 
+            class="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 text-xs"
+          >
+        </div>
+
+        <button 
+          type="submit" 
+          id="btnSubmitLogin"
+          class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition flex items-center justify-center gap-2 shadow-xs active:scale-95 cursor-pointer"
+        >
+          <i class="fa-solid fa-right-to-bracket text-xs"></i>
+          <span>Acessar Painel</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= CARREGAMENTO DE SCRIPTS ================= -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- Firebase SDK v10 (Compat para arquitetura global sem bundler) -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+  <!-- Módulos da Aplicação -->
+  <script src="js/constants/config.js"></script>
+  <script src="js/constants/firebaseConfig.js"></script>
+  <script src="js/utils/dataUtils.js"></script>
+  <script src="js/services/idbService.js"></script>
+  <script src="js/services/excelService.js"></script>
+  <script src="js/services/firebaseService.js"></script>
+
+  <!-- Componentes Modularizados -->
+  <script src="js/controllers/components/atrasosComponent.js"></script>
+  <script src="js/controllers/components/tabelaComponent.js"></script>
+  <script src="js/controllers/components/roadmapComponent.js"></script>
+  <script src="js/controllers/components/executivoComponent.js"></script>
+  <script src="js/controllers/components/modaisComponent.js"></script>
+  <script src="js/controllers/components/reportComponent.js"></script>
+  <script src="js/controllers/components/visaoExecutivaComponent.js"></script>
+
+  <!-- Orquestrador Principal e Inicialização -->
+  <script src="js/controllers/appController.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
