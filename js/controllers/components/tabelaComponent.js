@@ -4,6 +4,39 @@ class TabelaComponent {
     this.ctrl = controller;
     this.debounceTimer = null;
     this.atividadesExpandidasTabela = new Set();
+    this.statusSelecionados = [];
+
+    // Catálogo de colunas para personalização e exportação Excel
+    this.catalogoMaster = [
+      { id: 'id', rotulo: 'ID da Demanda', padrao: true },
+      { id: 'titulo', rotulo: 'Título / Atividade', padrao: true },
+      { id: 'macroCadeiaValor', rotulo: 'Cadeia de Valor (Pai)', padrao: false },
+      { id: 'cadeiaValor', rotulo: 'Projetos / Frentes', padrao: true },
+      { id: 'equipe', rotulo: 'Equipe', padrao: true },
+      { id: 'responsavel', rotulo: 'Responsável', padrao: true },
+      { id: 'liderTechProtheus', rotulo: 'Líder Tech Protheus', padrao: false },
+      { id: 'liderTechWebtrade', rotulo: 'Líder Tech Webtrade', padrao: false },
+      { id: 'desenvolvedor', rotulo: 'Desenvolvedor', padrao: false },
+      { id: 'prioridade', rotulo: 'Prioridade', padrao: true },
+      { id: 'status', rotulo: 'Status Geral', padrao: true },
+      { id: 'progresso', rotulo: 'Progresso (%)', padrao: true },
+      { id: 'prazoInicio', rotulo: 'Prazo Início', padrao: false },
+      { id: 'prazo', rotulo: 'Prazo Programado', padrao: true },
+      { id: 'conclusao', rotulo: 'Conclusão Efetiva', padrao: false }
+    ];
+    this.catalogoEtapas = [
+      { id: 'ordem', rotulo: 'Ordem (#)', padrao: true },
+      { id: 'fase', rotulo: 'Fase / Nome', padrao: true },
+      { id: 'titulo', rotulo: 'Título da Etapa', padrao: true },
+      { id: 'responsavel', rotulo: 'Responsável', padrao: true },
+      { id: 'dataInicio', rotulo: 'Data Início', padrao: false },
+      { id: 'dataProgramada', rotulo: 'Data Programada', padrao: true },
+      { id: 'dataEntrega', rotulo: 'Data de Entrega', padrao: true },
+      { id: 'status', rotulo: 'Situação', padrao: true },
+      { id: 'obs', rotulo: 'Observações', padrao: true }
+    ];
+    this.colunasMasterAtivas = this.carregarColunasSalvas('brg_report_cols_master', this.catalogoMaster);
+    this.colunasEtapasAtivas = this.carregarColunasSalvas('brg_report_cols_etapas', this.catalogoEtapas);
   }
 
   get itensPorPagina() { return this.ctrl.itensPorPagina; }
@@ -12,6 +45,303 @@ class TabelaComponent {
   set paginaAtual(v) { this.ctrl.paginaAtual = v; }
   get itensFiltradosAtuais() { return this.ctrl.itensFiltradosAtuais; }
   set itensFiltradosAtuais(v) { this.ctrl.itensFiltradosAtuais = v; }
+
+  carregarColunasSalvas(chaveStorage, catalogo) {
+    try {
+      const salvo = localStorage.getItem(chaveStorage);
+      if (salvo) {
+        const arr = JSON.parse(salvo);
+        if (Array.isArray(arr) && arr.length > 0) return arr;
+      }
+    } catch (e) {}
+    return catalogo.filter(c => c.padrao).map(c => c.id);
+  }
+
+  salvarColunasNoStorage() {
+    try {
+      localStorage.setItem('brg_report_cols_master', JSON.stringify(this.colunasMasterAtivas));
+      localStorage.setItem('brg_report_cols_etapas', JSON.stringify(this.colunasEtapasAtivas));
+    } catch (e) {}
+  }
+
+  // ================= CONFIGURAÇÃO DE COLUNAS =================
+  abrirModalConfigColunas() {
+    const modal = document.getElementById('modalColunasReport');
+    if (!modal) return;
+    const gradeMaster = document.getElementById('gradeCheckboxesColunasMaster');
+    const gradeEtapas = document.getElementById('gradeCheckboxesColunasEtapas');
+    if (gradeMaster) {
+      gradeMaster.innerHTML = this.catalogoMaster.map(col => `
+        <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200/80 hover:bg-slate-50 cursor-pointer select-none transition">
+          <input
+            type="checkbox"
+            data-grupo="master"
+            value="${col.id}"
+            ${this.colunasMasterAtivas.includes(col.id) ? 'checked' : ''}
+            class="rounded text-emerald-600 focus:ring-0 cursor-pointer h-3.5 w-3.5"
+          >
+          <span class="text-slate-800 font-medium">${this.ctrl.escapeHtml(col.rotulo)}</span>
+        </label>
+      `).join('');
+    }
+    if (gradeEtapas) {
+      gradeEtapas.innerHTML = this.catalogoEtapas.map(col => `
+        <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200/80 hover:bg-slate-50 cursor-pointer select-none transition">
+          <input
+            type="checkbox"
+            data-grupo="etapas"
+            value="${col.id}"
+            ${this.colunasEtapasAtivas.includes(col.id) ? 'checked' : ''}
+            class="rounded text-emerald-600 focus:ring-0 cursor-pointer h-3.5 w-3.5"
+          >
+          <span class="text-slate-800 font-medium">${this.ctrl.escapeHtml(col.rotulo)}</span>
+        </label>
+      `).join('');
+    }
+    modal.classList.remove('hidden');
+  }
+
+  fecharModalConfigColunas() {
+    document.getElementById('modalColunasReport')?.classList.add('hidden');
+  }
+
+  marcarTodasColunas(grupo, marcar) {
+    const checks = document.querySelectorAll(`#modalColunasReport input[data-grupo="${grupo}"]`);
+    checks.forEach(chk => { chk.checked = marcar; });
+  }
+
+  restaurarColunasPadrao() {
+    this.colunasMasterAtivas = this.catalogoMaster.filter(c => c.padrao).map(c => c.id);
+    this.colunasEtapasAtivas = this.catalogoEtapas.filter(c => c.padrao).map(c => c.id);
+    this.salvarColunasNoStorage();
+    this.abrirModalConfigColunas();
+    this.ctrl.exibirToast('Padrão de colunas restaurado.', 'info');
+  }
+
+  salvarConfigColunas() {
+    const checksMaster = document.querySelectorAll('#modalColunasReport input[data-grupo="master"]:checked');
+    const checksEtapas = document.querySelectorAll('#modalColunasReport input[data-grupo="etapas"]:checked');
+    const selecionadasMaster = Array.from(checksMaster).map(chk => chk.value);
+    const selecionadasEtapas = Array.from(checksEtapas).map(chk => chk.value);
+    if (selecionadasMaster.length === 0) {
+      this.ctrl.exibirToast('Selecione pelo menos uma coluna para a linha da atividade.', 'erro');
+      return;
+    }
+    this.colunasMasterAtivas = selecionadasMaster;
+    this.colunasEtapasAtivas = selecionadasEtapas;
+    this.salvarColunasNoStorage();
+    this.fecharModalConfigColunas();
+    this.ctrl.exibirToast('Configuração de colunas para exportação salva!', 'sucesso');
+  }
+
+  // ================= STATUS MULTISSELEÇÃO =================
+  obterEstiloDotStatus(status) {
+    const norm = this.ctrl.normalizarStatus(status);
+    if (norm === 'Concluído') return { texto: 'text-emerald-700', dot: 'bg-emerald-500' };
+    if (norm === 'Em Andamento') return { texto: 'text-blue-700', dot: 'bg-blue-500' };
+    if (norm === 'Bloqueado') return { texto: 'text-rose-700', dot: 'bg-rose-500' };
+    if (norm === 'Em Revisão') return { texto: 'text-purple-700', dot: 'bg-purple-500' };
+    if (norm === 'Não iniciado') return { texto: 'text-slate-600', dot: 'bg-slate-400' };
+    return { texto: 'text-indigo-700', dot: 'bg-indigo-500' };
+  }
+
+  obterListaStatusConfigurados() {
+    if (this.ctrl.configuracoes && Array.isArray(this.ctrl.configuracoes.statusList) && this.ctrl.configuracoes.statusList.length > 0) {
+      return this.ctrl.configuracoes.statusList;
+    }
+    return ['Não iniciado', 'Em Andamento', 'Em Revisão', 'Bloqueado', 'Concluído'];
+  }
+
+  popularDropdownStatus() {
+    const container = document.getElementById('listaCheckboxesStatusTabela');
+    if (!container) return;
+    const lista = this.obterListaStatusConfigurados();
+    if (this.statusSelecionados.length > 0 && !this.statusSelecionados.includes('NENHUM')) {
+      this.statusSelecionados = this.statusSelecionados.filter(s => lista.includes(s));
+    }
+    container.innerHTML = lista.map(st => {
+      const estilo = this.obterEstiloDotStatus(st);
+      const isChecado = this.statusSelecionados.length === 0 || this.statusSelecionados.includes(st);
+      return `
+        <label class="flex items-center justify-between p-1.5 hover:bg-slate-50 rounded-lg cursor-pointer transition select-none">
+          <span class="flex items-center gap-2 text-slate-800 font-medium truncate">
+            <input
+              type="checkbox"
+              value="${this.ctrl.escapeAttrJs(st)}"
+              ${isChecado ? 'checked' : ''}
+              onchange="app.aoAlternarStatusTabela('${this.ctrl.escapeAttrJs(st)}', this.checked)"
+              class="chk-status-tabela rounded text-emerald-600 focus:ring-0 cursor-pointer h-3.5 w-3.5 shrink-0"
+            >
+            <span class="font-semibold ${estilo.texto} text-[11px] truncate">${this.ctrl.escapeHtml(st)}</span>
+          </span>
+          <span class="w-2 h-2 rounded-full ${estilo.dot} shrink-0 ml-1"></span>
+        </label>
+      `;
+    }).join('');
+    this.atualizarRotuloStatus();
+  }
+
+  toggleStatusDropdown(event) {
+    if (event) event.stopPropagation();
+    const dropdown = document.getElementById('dropdownStatusTabela');
+    if (!dropdown) return;
+    if (dropdown.classList.contains('hidden')) {
+      this.popularDropdownStatus();
+    }
+    dropdown.classList.toggle('hidden');
+  }
+
+  fecharStatusDropdown() {
+    document.getElementById('dropdownStatusTabela')?.classList.add('hidden');
+  }
+
+  sincronizarCheckboxesStatus() {
+    const checkboxes = document.querySelectorAll('.chk-status-tabela');
+    checkboxes.forEach(chk => {
+      if (this.statusSelecionados.length === 0) {
+        chk.checked = true;
+      } else if (this.statusSelecionados.includes('NENHUM')) {
+        chk.checked = false;
+      } else {
+        chk.checked = this.statusSelecionados.includes(chk.value);
+      }
+    });
+    this.atualizarRotuloStatus();
+  }
+
+  aoAlternarStatus(statusNome, checado) {
+    const todos = this.obterListaStatusConfigurados();
+    if (this.statusSelecionados.length === 0) {
+      if (!checado) {
+        this.statusSelecionados = todos.filter(s => s !== statusNome);
+      }
+    } else {
+      if (checado) {
+        this.statusSelecionados = this.statusSelecionados.filter(s => s !== 'NENHUM');
+        if (!this.statusSelecionados.includes(statusNome)) {
+          this.statusSelecionados.push(statusNome);
+        }
+        if (this.statusSelecionados.length === todos.length) {
+          this.statusSelecionados = [];
+        }
+      } else {
+        this.statusSelecionados = this.statusSelecionados.filter(s => s !== statusNome);
+        if (this.statusSelecionados.length === 0) {
+          this.statusSelecionados = ['NENHUM'];
+        }
+      }
+    }
+    this.ctrl._setValue('filtroStatus', '');
+    this.atualizarRotuloStatus();
+    this.aplicarFiltros(true);
+  }
+
+  selecionarTodosStatus(todos) {
+    this.statusSelecionados = todos ? [] : ['NENHUM'];
+    this.ctrl._setValue('filtroStatus', '');
+    this.sincronizarCheckboxesStatus();
+    this.aplicarFiltros(true);
+  }
+
+  atualizarRotuloStatus() {
+    const lbl = document.getElementById('lblStatusTabelaSelecionado');
+    const badgeQtd = document.getElementById('lblQtdStatusTabela');
+    const btn = document.getElementById('btnToggleStatusTabelaDropdown');
+    const todos = this.obterListaStatusConfigurados();
+    const sel = this.statusSelecionados;
+    let texto = 'Todos';
+    let qtdTexto = `Todos ativos (${todos.length})`;
+    if (sel.length === 0 || sel.length === todos.length) {
+      texto = 'Todos';
+      qtdTexto = `Todos ativos (${todos.length})`;
+    } else if (sel.includes('NENHUM')) {
+      texto = 'Nenhum';
+      qtdTexto = '0 ativos';
+    } else if (sel.length === 1) {
+      texto = sel[0];
+      qtdTexto = '1 selecionado';
+    } else {
+      texto = `${sel.length} sel.`;
+      qtdTexto = `${sel.length} selecionados`;
+    }
+    if (lbl) lbl.innerText = texto;
+    if (badgeQtd) badgeQtd.innerText = qtdTexto;
+    if (btn) {
+      const tooltip = (sel.length === 0 || sel.length === todos.length)
+        ? 'Todos os status ativos'
+        : (sel.includes('NENHUM') ? 'Nenhum status' : sel.join(', '));
+      btn.title = `Status: ${tooltip}`;
+    }
+  }
+
+  // ================= LIMPEZA DE DATAS =================
+  limparFiltroDatas() {
+    this.ctrl._setValue('filtroDataInicioTabela', '');
+    this.ctrl._setValue('filtroDataFimTabela', '');
+    this.aplicarFiltros(true);
+  }
+
+  // ================= EXPORTAÇÃO EXCEL FILTRADA =================
+  exportarExcel() {
+    if (!this.itensFiltradosAtuais || this.itensFiltradosAtuais.length === 0) {
+      this.ctrl.exibirToast('Não há atividades filtradas para exportar.', 'info');
+      return;
+    }
+    this.ctrl.excelService.verificarSheetJsDisponivel();
+    const colsMaster = this.catalogoMaster.filter(c => this.colunasMasterAtivas.includes(c.id));
+    const colsEtapas = this.catalogoEtapas.filter(c => this.colunasEtapasAtivas.includes(c.id));
+    const linhasPlanilha = [];
+
+    this.itensFiltradosAtuais.forEach(item => {
+      if (colsEtapas.length === 0) {
+        const linhaObj = {};
+        colsMaster.forEach(col => {
+          let val = item[col.id];
+          if (col.id === 'prioridade') val = String(val || '').split(' ')[0];
+          if (col.id === 'status') val = this.ctrl.normalizarStatus(val);
+          linhaObj[col.rotulo] = val !== undefined && val !== null ? val : '';
+        });
+        linhasPlanilha.push(linhaObj);
+        return;
+      }
+
+      const etapas = (item.etapasCiclo && Array.isArray(item.etapasCiclo) && item.etapasCiclo.length > 0)
+        ? item.etapasCiclo
+        : [{ nome: item.etapa || 'Dev', titulo: '', responsavel: item.responsavel || '', dataInicio: item.etapaDataInicio || '', dataProgramada: item.etapaInicio, dataEntrega: item.etapaFim, obs: item.etapaObs }];
+
+      etapas.forEach((etapa, idx) => {
+        const linhaObj = {};
+        colsMaster.forEach(col => {
+          let val = item[col.id];
+          if (col.id === 'prioridade') val = String(val || '').split(' ')[0];
+          if (col.id === 'status') val = this.ctrl.normalizarStatus(val);
+          linhaObj[col.rotulo] = val !== undefined && val !== null ? val : '';
+        });
+        colsEtapas.forEach(col => {
+          let valEtapa = '';
+          if (col.id === 'ordem') valEtapa = idx + 1;
+          else if (col.id === 'fase') valEtapa = etapa.nome || '';
+          else if (col.id === 'titulo') valEtapa = etapa.titulo || '';
+          else if (col.id === 'responsavel') valEtapa = etapa.responsavel || '';
+          else if (col.id === 'dataInicio') valEtapa = etapa.dataInicio || '';
+          else if (col.id === 'dataProgramada') valEtapa = etapa.dataProgramada || '';
+          else if (col.id === 'dataEntrega') valEtapa = etapa.dataEntrega || '';
+          else if (col.id === 'status') valEtapa = (etapa.concluida || etapa.dataEntrega) ? 'Concluída' : 'Pendente';
+          else if (col.id === 'obs') valEtapa = etapa.obs || '';
+
+          linhaObj[`[Etapa] ${col.rotulo}`] = valEtapa;
+        });
+        linhasPlanilha.push(linhaObj);
+      });
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(linhasPlanilha);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Atividades_Filtradas');
+    const dataHoje = new Date().toISOString().slice(0, 10);
+    XLSX.writeFile(workbook, `Atividades_BRG_${dataHoje}.xlsx`);
+    this.ctrl.exibirToast('Relatório Excel exportado respeitando filtros e colunas!', 'sucesso');
+  }
 
   // ================= EXPANSÃO SANFONADA DAS ETAPAS =================
   toggleExpandirLinhaTabela(id, event) {
@@ -116,6 +446,10 @@ class TabelaComponent {
     this.ctrl._setValue('filtroEquipe', '');
     this.ctrl._setValue('filtroPrioridade', '');
     this.ctrl._setValue('filtroStatus', '');
+    this.ctrl._setValue('filtroDataInicioTabela', '');
+    this.ctrl._setValue('filtroDataFimTabela', '');
+    this.statusSelecionados = [];
+    this.sincronizarCheckboxesStatus();
     if (chamarAplicar) this.aplicarFiltros(true);
   }
 
@@ -126,15 +460,58 @@ class TabelaComponent {
     const cadeia = (document.getElementById('filtroCadeiaValor')?.value || '').trim();
     const equipe = (document.getElementById('filtroEquipe')?.value || '').trim();
     const prioridade = (document.getElementById('filtroPrioridade')?.value || '').trim();
-    const statusFiltro = (document.getElementById('filtroStatus')?.value || '').trim();
+    const dtInicioFiltroStr = (document.getElementById('filtroDataInicioTabela')?.value || '').trim();
+    const dtFimFiltroStr = (document.getElementById('filtroDataFimTabela')?.value || '').trim();
+
+    const btnLimparDatas = document.getElementById('btnLimparDatasTabela');
+    if (btnLimparDatas) {
+      btnLimparDatas.classList.toggle('hidden', !dtInicioFiltroStr && !dtFimFiltroStr);
+    }
+
+    const dFiltroInicio = dtInicioFiltroStr ? new Date(`${dtInicioFiltroStr}T00:00:00`) : null;
+    const dFiltroFim = dtFimFiltroStr ? new Date(`${dtFimFiltroStr}T23:59:59`) : null;
+
+    // Retrocompatibilidade: se o Painel Executivo definiu um status único no input hidden #filtroStatus
+    const statusHidden = (document.getElementById('filtroStatus')?.value || '').trim();
+    if (statusHidden) {
+      this.statusSelecionados = [statusHidden];
+      this.ctrl._setValue('filtroStatus', '');
+      this.sincronizarCheckboxesStatus();
+    }
+
     const temFiltroAtivo = Boolean(
-      termo || macroCadeia || cadeia || equipe || prioridade || statusFiltro || this.ctrl.filtroApenasForaDoPrazo
+      termo ||
+      macroCadeia ||
+      cadeia ||
+      equipe ||
+      prioridade ||
+      this.statusSelecionados.length > 0 ||
+      dtInicioFiltroStr ||
+      dtFimFiltroStr ||
+      this.ctrl.filtroApenasForaDoPrazo
     );
     const btnLimpar = document.getElementById('btnLimparFiltros');
     if (btnLimpar) {
       btnLimpar.classList.toggle('hidden', !temFiltroAtivo);
       btnLimpar.classList.toggle('inline-flex', temFiltroAtivo);
     }
+
+    const extrairData = (valor, fallbackFimMes = false) => {
+      if (!valor) return null;
+      const s = String(valor).trim();
+      if (/^\d{4}-\d{2}-\d{2}/.test(s)) {
+        const [ano, mes, dia] = s.slice(0, 10).split('-').map(Number);
+        return new Date(ano, mes - 1, dia, fallbackFimMes ? 23 : 0, fallbackFimMes ? 59 : 0, fallbackFimMes ? 59 : 0);
+      }
+      if (/^\d{4}-\d{1,2}$/.test(s)) {
+        const [ano, mes] = s.split('-').map(Number);
+        const dia = fallbackFimMes ? new Date(ano, mes, 0).getDate() : 1;
+        return new Date(ano, mes - 1, dia, fallbackFimMes ? 23 : 0, fallbackFimMes ? 59 : 0, fallbackFimMes ? 59 : 0);
+      }
+      const d = this.ctrl.parseData ? this.ctrl.parseData(s) : null;
+      return (d && !isNaN(d.getTime())) ? d : null;
+    };
+
     const banco = this.ctrl.bancoDados || [];
     this.itensFiltradosAtuais = banco.filter(item => {
       if (this.ctrl.filtroApenasForaDoPrazo && !this.ctrl.verificarAtividadeForaDoPrazo(item)) {
@@ -178,10 +555,23 @@ class TabelaComponent {
           }
         }
       }
-      if (statusFiltro && !statusFiltro.toLowerCase().includes('todos')) {
+      if (this.statusSelecionados.length > 0) {
+        if (this.statusSelecionados.includes('NENHUM')) return false;
         const stItemNorm = this.ctrl.normalizarStatus(item.status);
-        const stFiltroNorm = this.ctrl.normalizarStatus(statusFiltro);
-        if (stItemNorm !== stFiltroNorm) return false;
+        const selecionadosNorm = this.statusSelecionados.map(s => this.ctrl.normalizarStatus(s));
+        if (!selecionadosNorm.includes(stItemNorm)) return false;
+      }
+      if (dFiltroInicio || dFiltroFim) {
+        const dIni = extrairData(item.prazoInicio, false) || extrairData(item.prazo, false) || extrairData(item.conclusao, false);
+        const dFim = extrairData(item.prazo, true) || extrairData(item.conclusao, true) || dIni;
+        if (!dIni && !dFim) return false;
+
+        const inicioAtividade = dIni <= dFim ? dIni : dFim;
+        const fimAtividade = dFim >= dIni ? dFim : dIni;
+
+        // Sobreposição de intervalos: atividade em andamento dentro da range selecionada
+        if (dFiltroInicio && fimAtividade < dFiltroInicio) return false;
+        if (dFiltroFim && inicioAtividade > dFiltroFim) return false;
       }
       return true;
     });
@@ -306,7 +696,6 @@ class TabelaComponent {
       const prazoFormatado = item.prazo ? this.ctrl.formatarMesAno(item.prazo) : '<span class="text-slate-300 font-normal">--</span>';
       const conclusaoFormatada = item.conclusao ? this.ctrl.formatarMesAno(item.conclusao) : '<span class="text-slate-300 font-normal">--</span>';
 
-      // 1. Linha Mestre da Atividade
       htmlLinhas += `
         <tr class="hover:bg-slate-50/90 transition-colors border-b border-slate-100/90 group ${isExpandido ? 'bg-slate-50/70' : ''}">
           <td class="py-2 px-1.5 text-center whitespace-nowrap">
@@ -387,7 +776,6 @@ class TabelaComponent {
         </tr>
       `;
 
-      // 2. Sub-tabela Sanfonada das Etapas (quando expandido)
       if (isExpandido && temEtapas) {
         htmlLinhas += `
           <tr class="bg-slate-100/60 border-b border-slate-200">

@@ -587,6 +587,10 @@ class AppController {
       this.roadmapComponent.popularDropdownPrioridadesRoadmap();
     }
 
+    if (this.tabelaComponent) {
+      this.tabelaComponent.popularDropdownStatus();
+    }
+
     // Dropdowns de Filtro (mantêm valores legados para consulta e reclassificação)
     setDropdownOptions('filtroMacroCadeiaValor', macroFiltros, 'Todas Cadeias de Valor', document.getElementById('filtroMacroCadeiaValor')?.value);
     setDropdownOptions('filtroCadeiaValor', cadeiasFiltros, 'Todos Projetos / Frentes', document.getElementById('filtroCadeiaValor')?.value);
@@ -929,33 +933,18 @@ class AppController {
   aoAlterarAtividadeDependenciaEtapaForm(i, id) { if (this.modaisComponent) this.modaisComponent.aoAlterarAtividadeDependenciaEtapaForm(i, id); }
   aoAlterarEtapaDependenciaEtapaForm(i, n) { if (this.modaisComponent) this.modaisComponent.aoAlterarEtapaDependenciaEtapaForm(i, n); }
 
-  toggleStatusReportDropdown(e) { if (this.reportComponent) this.reportComponent.toggleStatusDropdown(e); }
-  fecharStatusReportDropdown() { if (this.reportComponent) this.reportComponent.fecharStatusDropdown(); }
-  aoAlternarStatusReport(s, c) { if (this.reportComponent) this.reportComponent.aoAlternarStatus(s, c); }
-  selecionarTodosStatusReport(t) { if (this.reportComponent) this.reportComponent.selecionarTodosStatus(t); }
+  // Multisseleção de Status, Colunas e Exportação Excel (unificados na Aba Atividades)
+  toggleStatusTabelaDropdown(e) { if (this.tabelaComponent) this.tabelaComponent.toggleStatusDropdown(e); }
+  fecharStatusTabelaDropdown() { if (this.tabelaComponent) this.tabelaComponent.fecharStatusDropdown(); }
+  aoAlternarStatusTabela(s, c) { if (this.tabelaComponent) this.tabelaComponent.aoAlternarStatus(s, c); }
+  selecionarTodosStatusTabela(t) { if (this.tabelaComponent) this.tabelaComponent.selecionarTodosStatus(t); }
 
-  abrirModalConfigColunasReport() { if (this.reportComponent) this.reportComponent.abrirModalConfigColunas(); }
-  fecharModalConfigColunasReport() { if (this.reportComponent) this.reportComponent.fecharModalConfigColunas(); }
-  salvarConfigColunasReport() { if (this.reportComponent) this.reportComponent.salvarConfigColunas(); }
-  marcarTodasColunasReport(g, m) { if (this.reportComponent) this.reportComponent.marcarTodasColunas(g, m); }
-  restaurarColunasPadraoReport() { if (this.reportComponent) this.reportComponent.restaurarColunasPadrao(); }
-
-  toggleExpandirReport(id, e) { if (this.reportComponent) this.reportComponent.toggleExpandirLinha(id, e); }
-  toggleExpandirTodasReport(exp) { if (this.reportComponent) this.reportComponent.toggleExpandirTodas(exp); }
-  aplicarFiltrosReport() { if (this.reportComponent) this.reportComponent.aplicarFiltros(); }
-  exportarExcelReport() { if (this.reportComponent) this.reportComponent.exportarExcel(); }
-  mudarItensPorPaginaReport(v) { if (this.reportComponent) this.reportComponent.mudarItensPorPagina(v); }
-  mudarPaginaReport(p) { if (this.reportComponent) this.reportComponent.mudarPagina(p); }
-
-  togglePrioridadeReportDropdown(e) { if (this.reportComponent) this.reportComponent.togglePrioridadeDropdown(e); }
-  fecharPrioridadeReportDropdown() { if (this.reportComponent) this.reportComponent.fecharPrioridadeDropdown(); }
-  aoAlternarPrioridadeReport(p, c) { if (this.reportComponent) this.reportComponent.aoAlternarPrioridade(p, c); }
-  selecionarTodasPrioridadesReport(t) { if (this.reportComponent) this.reportComponent.selecionarTodasPrioridades(t); }
-
-  toggleStatusEtapaReportDropdown(e) { if (this.reportComponent) this.reportComponent.toggleStatusEtapaDropdown(e); }
-  fecharStatusEtapaReportDropdown() { if (this.reportComponent) this.reportComponent.fecharStatusEtapaDropdown(); }
-  aoAlternarStatusEtapaReport(s, c) { if (this.reportComponent) this.reportComponent.aoAlternarStatusEtapa(s, c); }
-  selecionarTodosStatusEtapaReport(t) { if (this.reportComponent) this.reportComponent.selecionarTodosStatusEtapa(t); }
+  abrirModalConfigColunasReport() { if (this.tabelaComponent) this.tabelaComponent.abrirModalConfigColunas(); }
+  fecharModalConfigColunasReport() { if (this.tabelaComponent) this.tabelaComponent.fecharModalConfigColunas(); }
+  salvarConfigColunasReport() { if (this.tabelaComponent) this.tabelaComponent.salvarConfigColunas(); }
+  marcarTodasColunasReport(g, m) { if (this.tabelaComponent) this.tabelaComponent.marcarTodasColunas(g, m); }
+  restaurarColunasPadraoReport() { if (this.tabelaComponent) this.tabelaComponent.restaurarColunasPadrao(); }
+  exportarExcelReport() { if (this.tabelaComponent) this.tabelaComponent.exportarExcel(); }
 
   abrirModalVisaoExecutiva() {
     if (!this.visaoExecutivaComponent && typeof window.VisaoExecutivaComponent === 'function') {
