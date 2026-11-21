@@ -512,34 +512,6 @@
             </div>
             
             <div class="flex items-center gap-2 shrink-0">
-              
-              <div class="inline-flex items-center bg-white border border-slate-200 rounded-lg p-0.5 shadow-2xs">
-                <label class="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium text-slate-600 cursor-pointer select-none hover:text-slate-900 border-r border-slate-100">
-                  <input type="checkbox" id="autoSaveToggle" checked class="rounded text-emerald-600 focus:ring-0 cursor-pointer h-3.5 w-3.5">
-                  <span>Auto-Salvar</span>
-                </label>
-
-                <button 
-                  type="button"
-                  onclick="app.salvarNoExcel(true)" 
-                  id="btnSalvarManual" 
-                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold text-emerald-700 hover:bg-emerald-50 active:scale-95 transition"
-                  title="Gravar alterações imediatamente no arquivo .xlsx físico"
-                >
-                  <i class="fa-solid fa-floppy-disk text-emerald-600 text-xs"></i>
-                  <span>Gravar</span>
-                </button>
-              </div>
-
-              <button 
-                type="button"
-                onclick="app.abrirModalPreviewExcel()"
-                class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium flex items-center gap-1.5 shadow-2xs transition active:scale-95 hover:border-slate-300"
-                title="Ver abas e células da planilha Excel"
-              >
-                <i class="fa-solid fa-table-cells text-emerald-600 text-xs"></i>
-                <span class="hidden sm:inline">Células Excel (3 Abas)</span>
-              </button>
 
               <button 
                 type="button"
@@ -549,9 +521,7 @@
                 <i class="fa-solid fa-plus text-xs text-emerald-400"></i>
                 <span>Nova Atividade</span>
               </button>
-
             </div>
-
           </div>
 
           <!-- Barra de Filtros Dedicada -->
@@ -1371,64 +1341,6 @@
             Aplicar e Salvar
           </button>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= MODAL: PREVIEW DE CÉLULAS DO EXCEL (3 ABAS) ================= -->
-  <div 
-    id="modalPreviewExcel" 
-    onclick="if(event.target === this) app.fecharModalPreviewExcel()"
-    class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4" 
-    role="dialog" 
-    aria-modal="true" 
-    aria-labelledby="modalPreviewTitulo"
-  >
-    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-5xl max-h-[85vh] flex flex-col overflow-hidden animate-modal">
-      
-      <div class="bg-slate-900 text-white p-3.5 flex items-center justify-between shrink-0 select-none">
-        <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-2xs">
-            <i class="fa-solid fa-file-excel"></i>
-          </div>
-          <div>
-            <h4 id="modalPreviewTitulo" class="font-semibold text-xs text-white">Visualizador da Estrutura Física do Excel (.xlsx)</h4>
-            <div class="flex items-center gap-1.5 mt-1">
-              <span class="text-[10px] text-slate-400 mr-1">Abas físicas:</span>
-              <button type="button" onclick="app.alternarAbaPreview('tb_Atividades')" id="btnAbaPreviewAtividades" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-600 text-white font-semibold transition">1. tb_Atividades</button>
-              <button type="button" onclick="app.alternarAbaPreview('tb_Detalhes_ID')" id="btnAbaPreviewDetalhes" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white transition">2. tb_Detalhes_ID</button>
-              <button type="button" onclick="app.alternarAbaPreview('tb_Configuracoes')" id="btnAbaPreviewConfig" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white transition">3. tb_Configuracoes</button>
-            </div>
-          </div>
-        </div>
-        <button type="button" onclick="app.fecharModalPreviewExcel()" class="text-slate-400 hover:text-white p-1 rounded-lg text-sm transition hover:bg-slate-800" aria-label="Fechar pré-visualização">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <div class="bg-slate-50 border-b border-slate-200 px-3 py-1.5 flex items-center gap-2 text-xs select-none">
-        <span class="text-slate-400 font-serif italic font-bold text-xs">fx</span>
-        <div id="previewFormulaBar" class="bg-white border border-slate-200 px-2 py-0.5 rounded text-[11px] font-mono text-slate-700 flex-1 truncate">
-          =TABLE[...]
-        </div>
-      </div>
-
-      <div class="flex-1 overflow-auto p-3 bg-slate-100">
-        <div class="bg-white border border-slate-200 rounded-lg shadow-2xs overflow-hidden">
-          <table class="w-full border-collapse text-xs table-fixed">
-            <thead id="previewExcelGridHead" class="bg-slate-100 text-slate-600 font-mono text-[10px] border-b border-slate-200 select-none">
-            </thead>
-            <tbody id="previewExcelGridBody" class="font-mono text-[11px] divide-y divide-slate-100 text-slate-700">
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="p-3 bg-white border-t border-slate-200 flex items-center justify-between text-xs shrink-0">
-        <span class="text-slate-500 text-[11px]">Todos os dados das 3 abas sincronizam com o arquivo .xlsx local.</span>
-        <button type="button" onclick="app.fecharModalPreviewExcel()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-medium transition">
-          Fechar
-        </button>
       </div>
     </div>
   </div>

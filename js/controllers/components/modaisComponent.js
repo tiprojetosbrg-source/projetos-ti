@@ -1023,7 +1023,6 @@ class ModaisComponent {
     }
 
     this.fecharModalEdicaoEtapaIndividual();
-    this.ctrl.salvarNoLocalStorage();
     this.ctrl.aplicarFiltros(false);
     this.ctrl.atualizarPainelExecutivo();
     this.ctrl.renderizarRoadmap();
@@ -1034,11 +1033,8 @@ class ModaisComponent {
       this.renderizarEtapasDetalheModal();
     }
 
-    const autoSave = document.getElementById('autoSaveToggle');
-    if (autoSave?.checked) {
-      await this.ctrl.salvarNoExcel(false, item.id, 'upsert');
+    await this.ctrl.salvarNoExcel(false, item.id, 'upsert');
     }
-  }
 
   filtrarEtapasDetalheModal() {
     this.renderizarEtapasDetalheModal();
@@ -1887,12 +1883,8 @@ class ModaisComponent {
     this.ctrl.renderizarRoadmap();
     this.fecharModalForm();
     this.limparRascunhoForm();
-    this.ctrl.salvarNoLocalStorage();
 
-    const autoSave = document.getElementById('autoSaveToggle');
-    if (autoSave?.checked) {
-      await this.ctrl.salvarNoExcel(false, id, 'upsert');
-    }
+    await this.ctrl.salvarNoExcel(false, id, 'upsert');
   }
 
   // ================= MODAL DE EXCLUSÃO =================
@@ -1917,17 +1909,14 @@ class ModaisComponent {
     const idExcluido = this.itemParaExcluir;
     const idNormalizado = window.DataUtils ? window.DataUtils.normalizarId(idExcluido) : String(idExcluido).trim();
     this.ctrl.bancoDados = this.ctrl.bancoDados.filter(x => (window.DataUtils ? window.DataUtils.normalizarId(x.id) : String(x.id).trim()) !== idNormalizado);
-    this.ctrl.exibirToast(`Registro ${idExcluido} removido de todas as abas!`, 'info');
+    this.ctrl.exibirToast(`Registro ${idExcluido} removido com sucesso!`, 'info');
     this.fecharModalExclusao();
-    this.ctrl.salvarNoLocalStorage();
     this.ctrl.atualizarListasDeFiltro();
     this.ctrl.aplicarFiltros(false);
     this.ctrl.configurarRedimensionamentoTabela();
     this.ctrl.atualizarPainelExecutivo();
-    const autoSave = document.getElementById('autoSaveToggle');
-    if (autoSave?.checked) {
-      await this.ctrl.salvarNoExcel(false, idExcluido, 'delete');
-    }
+
+    await this.ctrl.salvarNoExcel(false, idExcluido, 'delete');
   }
 
   // ================= MODAL PREVIEW CÉLULAS EXCEL =================
