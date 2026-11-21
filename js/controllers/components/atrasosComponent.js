@@ -16,8 +16,14 @@ class AtrasosComponent {
         .replace(/[\u0300-\u036f]/g, '')
         .toLowerCase();
 
-      // REGRA: Atividade Concluída, Bloqueada ou em Backlog -> Não exibe nenhuma etapa
-      if (statusAtivNorm.includes('bloque') || statusAtivNorm.includes('conclu') || statusAtivNorm.includes('finaliz') || statusAtivNorm.includes('backlog')) {
+      // REGRA: Atividade Concluída, Bloqueada, Cancelada ou em Backlog -> Não exibe nenhuma etapa
+      if (
+        statusAtivNorm.includes('bloque') ||
+        statusAtivNorm.includes('conclu') ||
+        statusAtivNorm.includes('finaliz') ||
+        statusAtivNorm.includes('backlog') ||
+        statusAtivNorm.includes('cancel')
+      ) {
         return;
       }
 
@@ -42,18 +48,21 @@ class AtrasosComponent {
 
         // REGRA: Etapa Concluída -> Não exibe
         const isConcluida = Boolean(
-          et.concluida || 
-          (et.dataEntrega && String(et.dataEntrega).trim() !== '') || 
-          statusEtapaNorm.includes('conclu') || 
+          et.concluida ||
+          (et.dataEntrega && String(et.dataEntrega).trim() !== '') ||
+          statusEtapaNorm.includes('conclu') ||
           statusEtapaNorm.includes('finaliz')
         );
         if (isConcluida) return;
 
-        // REGRA: Etapa em Impedimento ou Backlog -> Não exibe
+        // REGRA: Etapa em Impedimento, Backlog ou Cancelada -> Não exibe
         const nomeEtNorm = String(et.nome || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
         const tituloEtNorm = String(et.titulo || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-        if (nomeEtNorm.includes('impediment') || tituloEtNorm.includes('impediment') || statusEtapaNorm.includes('impediment') ||
-            nomeEtNorm.includes('backlog') || tituloEtNorm.includes('backlog') || statusEtapaNorm.includes('backlog')) {
+        if (
+          nomeEtNorm.includes('impediment') || tituloEtNorm.includes('impediment') || statusEtapaNorm.includes('impediment') ||
+          nomeEtNorm.includes('backlog') || tituloEtNorm.includes('backlog') || statusEtapaNorm.includes('backlog') ||
+          nomeEtNorm.includes('cancel') || tituloEtNorm.includes('cancel') || statusEtapaNorm.includes('cancel')
+        ) {
           return;
         }
 
@@ -151,7 +160,13 @@ class AtrasosComponent {
       .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase();
 
-    if (statusAtivNorm.includes('bloque') || statusAtivNorm.includes('conclu') || statusAtivNorm.includes('finaliz') || statusAtivNorm.includes('backlog')) {
+    if (
+      statusAtivNorm.includes('bloque') ||
+      statusAtivNorm.includes('conclu') ||
+      statusAtivNorm.includes('finaliz') ||
+      statusAtivNorm.includes('backlog') ||
+      statusAtivNorm.includes('cancel')
+    ) {
       return false;
     }
 
@@ -173,17 +188,20 @@ class AtrasosComponent {
     for (const et of etapas) {
       const statusEtapaNorm = String(et.status || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
       const isConcluida = Boolean(
-        et.concluida || 
-        (et.dataEntrega && String(et.dataEntrega).trim() !== '') || 
-        statusEtapaNorm.includes('conclu') || 
+        et.concluida ||
+        (et.dataEntrega && String(et.dataEntrega).trim() !== '') ||
+        statusEtapaNorm.includes('conclu') ||
         statusEtapaNorm.includes('finaliz')
       );
       if (isConcluida) continue;
 
       const nomeEtNorm = String(et.nome || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
       const tituloEtNorm = String(et.titulo || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      if (nomeEtNorm.includes('impediment') || tituloEtNorm.includes('impediment') || statusEtapaNorm.includes('impediment') ||
-          nomeEtNorm.includes('backlog') || tituloEtNorm.includes('backlog') || statusEtapaNorm.includes('backlog')) {
+      if (
+        nomeEtNorm.includes('impediment') || tituloEtNorm.includes('impediment') || statusEtapaNorm.includes('impediment') ||
+        nomeEtNorm.includes('backlog') || tituloEtNorm.includes('backlog') || statusEtapaNorm.includes('backlog') ||
+        nomeEtNorm.includes('cancel') || tituloEtNorm.includes('cancel') || statusEtapaNorm.includes('cancel')
+      ) {
         continue;
       }
 
