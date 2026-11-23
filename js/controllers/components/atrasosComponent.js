@@ -4,6 +4,30 @@ class AtrasosComponent {
     this.ctrl = controller;
   }
 
+  // ================= AUXILIARES DE NORMALIZAÇÃO E FILTRO =================
+  _normalizarTextoComparacao(valor) {
+    return String(valor || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[\s\-_]+/g, '');
+  }
+
+  _isAtividadeIgnorada(item) {
+    const statusBruto = this._normalizarTextoComparacao(item.status);
+    const statusNorm = this._normalizarTextoComparacao(this.ctrl.normalizarStatus(item.status));
+    const termosIgnorados = ['bloque', 'conclu', 'finaliz', 'backlog', 'cancel'];
+    return termosIgnorados.some(termo => statusBruto.includes(termo) || statusNorm.includes(termo));
+  }
+
+  _isEtapaIgnorada(et) {
+    const statusEt = this._normalizarTextoComparacao(et.status);
+    const nomeEt = this._normalizarTextoComparacao(et.nome);
+    const tituloEt = this._normalizarTextoComparacao(et.titulo);
+    const termosIgnorados = ['impediment', 'backlog', 'cancel'];
+    return termosIgnorados.some(termo => statusEt.includes(termo) || nomeEt.includes(termo) || tituloEt.includes(termo));
+  }
+
   // ================= REGRAS DE ATRASO (ETAPA >> ATIVIDADE) =================
   obterDadosAtividadesForaDoPrazo() {
     const hoje = new Date();
@@ -11,22 +35,12 @@ class AtrasosComponent {
     const resultado = [];
 
     this.ctrl.bancoDados.forEach(item => {
-      const statusAtivNorm = String(this.ctrl.normalizarStatus(item.status) || '')
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase();
-
       // REGRA: Atividade Concluída, Bloqueada, Cancelada ou em Backlog -> Não exibe nenhuma etapa
-      if (
-        statusAtivNorm.includes('bloque') ||
-        statusAtivNorm.includes('conclu') ||
-        statusAtivNorm.includes('finaliz') ||
-        statusAtivNorm.includes('backlog') ||
-        statusAtivNorm.includes('cancel')
-      ) {
+      if (this._isAtividadeIgnorada(item)) {
         return;
       }
 
+      const statusAtivNorm = this._normalizarTextoComparacao(this.ctrl.normalizarStatus(item.status));
       const etapas = (item.etapasCiclo && Array.isArray(item.etapasCiclo) && item.etapasCiclo.length > 0)
         ? item.etapasCiclo
         : [{
@@ -41,10 +55,7 @@ class AtrasosComponent {
           }];
 
       etapas.forEach((et, idxEtapa) => {
-        const statusEtapaNorm = String(et.status || '')
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .toLowerCase();
+        const statusEtapaNorm = this._normalizarTextoComparacao(et.status);
 
         // REGRA: Etapa Concluída -> Não exibe
         const isConcluida = Boolean(
@@ -56,13 +67,7 @@ class AtrasosComponent {
         if (isConcluida) return;
 
         // REGRA: Etapa em Impedimento, Backlog ou Cancelada -> Não exibe
-        const nomeEtNorm = String(et.nome || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-        const tituloEtNorm = String(et.titulo || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-        if (
-          nomeEtNorm.includes('impediment') || tituloEtNorm.includes('impediment') || statusEtapaNorm.includes('impediment') ||
-          nomeEtNorm.includes('backlog') || tituloEtNorm.includes('backlog') || statusEtapaNorm.includes('backlog') ||
-          nomeEtNorm.includes('cancel') || tituloEtNorm.includes('cancel') || statusEtapaNorm.includes('cancel')
-        ) {
+        if (this._isEtapaIgnorada(et)) {
           return;
         }
 
@@ -155,21 +160,12 @@ class AtrasosComponent {
 
   verificarAtividadeForaDoPrazo(item) {
     if (!item) return false;
-    const statusAtivNorm = String(this.ctrl.normalizarStatus(item.status) || '')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase();
 
-    if (
-      statusAtivNorm.includes('bloque') ||
-      statusAtivNorm.includes('conclu') ||
-      statusAtivNorm.includes('finaliz') ||
-      statusAtivNorm.includes('backlog') ||
-      statusAtivNorm.includes('cancel')
-    ) {
+    if (this._isAtividadeIgnorada(item)) {
       return false;
     }
 
+    const statusAtivNorm = this._normalizarTextoComparacao(this.ctrl.normalizarStatus(item.status));
     const etapas = (item.etapasCiclo && Array.isArray(item.etapasCiclo) && item.etapasCiclo.length > 0)
       ? item.etapasCiclo
       : [{
@@ -186,7 +182,7 @@ class AtrasosComponent {
     hoje.setHours(0, 0, 0, 0);
 
     for (const et of etapas) {
-      const statusEtapaNorm = String(et.status || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      const statusEtapaNorm = this._normalizarTextoComparacao(et.status);
       const isConcluida = Boolean(
         et.concluida ||
         (et.dataEntrega && String(et.dataEntrega).trim() !== '') ||
@@ -195,13 +191,7 @@ class AtrasosComponent {
       );
       if (isConcluida) continue;
 
-      const nomeEtNorm = String(et.nome || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      const tituloEtNorm = String(et.titulo || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      if (
-        nomeEtNorm.includes('impediment') || tituloEtNorm.includes('impediment') || statusEtapaNorm.includes('impediment') ||
-        nomeEtNorm.includes('backlog') || tituloEtNorm.includes('backlog') || statusEtapaNorm.includes('backlog') ||
-        nomeEtNorm.includes('cancel') || tituloEtNorm.includes('cancel') || statusEtapaNorm.includes('cancel')
-      ) {
+      if (this._isEtapaIgnorada(et)) {
         continue;
       }
 
