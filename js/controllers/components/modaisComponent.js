@@ -70,6 +70,7 @@ class ModaisComponent {
       this.ctrl._setValue('inputCadeiaValor', rascunho.dados.cadeiaValor);
       this.ctrl._setValue('inputEquipe', rascunho.dados.equipe);
       this.ctrl._setValue('inputStatus', rascunho.dados.status);
+      this.atualizarObrigatoriedadeDatasPorStatus();
       this.ctrl._setValue('inputResponsavel', rascunho.dados.responsavel);
       this.ctrl._setValue('inputPrioridade', rascunho.dados.prioridade);
       this.ctrl._setValue('inputPrazoInicio', rascunho.dados.prazoInicio);
@@ -1614,6 +1615,28 @@ class ModaisComponent {
     this.ctrl.exibirToast(`Etapa "${proximaEtapaNome}" adicionada!`, 'sucesso');
   }
 
+  _isStatusBacklog(status) {
+    const norm = String(status || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[\s\-_]+/g, '');
+    return norm.includes('backlog');
+  }
+
+  atualizarObrigatoriedadeDatasPorStatus(statusVal) {
+    const statusAtual = statusVal !== undefined
+      ? statusVal
+      : (document.getElementById('inputStatus')?.value || '');
+    const isBacklog = this._isStatusBacklog(statusAtual);
+
+    const inputIni = document.getElementById('inputPrazoInicio');
+    const inputPrazo = document.getElementById('inputPrazo');
+
+    if (inputIni) inputIni.required = !isBacklog;
+    if (inputPrazo) inputPrazo.required = !isBacklog;
+  }
+
   abrirModalForm() {
     this.editandoId = null;
     this.ctrl.atualizarListasDeFiltro();
@@ -1630,6 +1653,7 @@ class ModaisComponent {
     this.ctrl._setValue('inputEquipe', equipePadrao);
     this.ctrl._setValue('inputPrioridade', 'P1 - Alta');
     this.ctrl._setValue('inputStatus', 'Não iniciado');
+    this.atualizarObrigatoriedadeDatasPorStatus();
     this.ctrl._setValue('inputResponsavel', '');
     this.ctrl._setValue('inputLiderProtheus', '');
     this.ctrl._setValue('inputLiderWebtrade', '');
@@ -1697,6 +1721,7 @@ class ModaisComponent {
     }
     this.ctrl._setValue('inputPrioridade', item.prioridade);
     this.ctrl._setValue('inputStatus', this.ctrl.normalizarStatus(item.status));
+    this.atualizarObrigatoriedadeDatasPorStatus();
     this.ctrl._setValue('inputResponsavel', item.responsavel);
     this.ctrl._setValue('inputLiderProtheus', item.liderTechProtheus || '');
     this.ctrl._setValue('inputLiderWebtrade', item.liderTechWebtrade || '');
@@ -1808,8 +1833,13 @@ class ModaisComponent {
     const prazo = normalizarData(document.getElementById('inputPrazo')?.value);
     const conclusao = normalizarData(document.getElementById('inputConclusao')?.value || '');
 
-    if (!id || !titulo || !responsavel || !prazoInicio || !prazo) {
-      this.ctrl.exibirToast('Preencha os campos obrigatórios (incluindo Data de Início e Prazo Programado).', 'erro');
+    const isBacklog = this._isStatusBacklog(status);
+
+    if (!id || !titulo || !responsavel || (!isBacklog && (!prazoInicio || !prazo))) {
+      const msg = isBacklog
+        ? 'Preencha os campos obrigatórios (ID, Título e Responsável).'
+        : 'Preencha os campos obrigatórios (incluindo Data de Início e Prazo Programado).';
+      this.ctrl.exibirToast(msg, 'erro');
       return;
     }
 

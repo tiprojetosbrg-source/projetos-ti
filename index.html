@@ -1491,6 +1491,7 @@
               <select 
                 id="inputStatus" 
                 required
+                onchange="if(app.modaisComponent) app.modaisComponent.atualizarObrigatoriedadeDatasPorStatus(this.value)"
                 class="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 bg-white text-slate-800 cursor-pointer text-xs font-medium shadow-2xs transition"
               >
               </select>
